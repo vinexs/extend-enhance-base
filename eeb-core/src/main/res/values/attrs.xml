@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="material_pref_color_accent" format="reference|color" />
+
+    <declare-styleable name="Theme">
+        <attr name="numberPickerPreferenceStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="NumberPickerPreference">
+        <attr name="minValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+        <attr name="valueAsSummary" format="boolean" />
+        <attr name="summaryFormat" format="string" />
+        <attr name="descendantFocusability" format="integer">
+            <enum name="beforeDescendants" value="131072" />
+            <enum name="afterDescendants" value="262144" />
+            <enum name="blocksDescendants" value="393216" />
+        </attr>
+        <attr name="wrapSelectorWheel" format="boolean" />
+        <attr name="subtitleText" format="string" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2015. Vin @ vinexs.com (MIT License)
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<resources>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#FF262626</item>
+        <item name="colorPrimaryDark">#FF000000</item>
+        <item name="colorAccent">#FFFF4081</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="preferenceTheme">@style/BasePreferenceTheme</item>
+        <!-- Android Prefix -->
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+        <item name="android:statusBarColor">#ee000000</item>
+    </style>
+
+    <!-- Classic Theme (Base)-->
+    <!-- ================================ -->
+    <style name="BaseTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="preferenceTheme">@style/BasePreferenceTheme</item>
+        <!-- Android Prefix -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+
+    <!-- Material Color Theme (Extends) -->
+    <!-- ================================ -->
+    <!-- RoseRed  -->
+    <style name="Compat.BaseTheme.RoseRed" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFD32F2F</item>
+        <item name="android:statusBarColor">#EED32F2F</item>
+    </style>
+
+    <!-- Pink  -->
+    <style name="Compat.BaseTheme.Pink" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFC2185B</item>
+        <item name="android:statusBarColor">#EEC2185B</item>
+    </style>
+
+    <!-- Purple  -->
+    <style name="Compat.BaseTheme.Purple" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF7B1FA2</item>
+        <item name="android:statusBarColor">#EE7B1FA2</item>
+    </style>
+
+    <!-- DeepPurple  -->
+    <style name="Compat.BaseTheme.DeepPurple" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF512DA8</item>
+        <item name="android:statusBarColor">#EE512DA8</item>
+    </style>
+
+    <!-- Indigo  -->
+    <style name="Compat.BaseTheme.Indigo" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF303F9F</item>
+        <item name="android:statusBarColor">#EE303F9F</item>
+    </style>
+
+    <!-- Blue  -->
+    <style name="Compat.BaseTheme.Blue" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF1976D2</item>
+        <item name="android:statusBarColor">#EE1976D2</item>
+    </style>
+
+    <!-- LightBlue  -->
+    <style name="Compat.BaseTheme.LightBlue" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF0288D1</item>
+        <item name="android:statusBarColor">#EE0288D1</item>
+    </style>
+
+    <!-- Cyan  -->
+    <style name="Compat.BaseTheme.Cyan" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF0097A7</item>
+        <item name="android:statusBarColor">#EE0097A7</item>
+    </style>
+
+    <!-- Teal  -->
+    <style name="Compat.BaseTheme.Teal" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF00796B</item>
+        <item name="android:statusBarColor">#EE00796B</item>
+    </style>
+
+    <!-- Green  -->
+    <style name="Compat.BaseTheme.Green" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF388E3C</item>
+        <item name="android:statusBarColor">#EE388E3C</item>
+    </style>
+
+    <!-- LightGreen  -->
+    <style name="Compat.BaseTheme.LightGreen" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF689F38</item>
+        <item name="android:statusBarColor">#EE689F38</item>
+    </style>
+
+    <!-- Lime  -->
+    <style name="Compat.BaseTheme.Lime" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFAFB42B</item>
+        <item name="android:statusBarColor">#EEAFB42B</item>
+    </style>
+
+    <!-- Yellow  -->
+    <style name="Compat.BaseTheme.Yellow" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFFBC02D</item>
+        <item name="android:statusBarColor">#EEFBC02D</item>
+    </style>
+
+    <!-- Amber  -->
+    <style name="Compat.BaseTheme.Amber" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFFFA000</item>
+        <item name="android:statusBarColor">#EEFFA000</item>
+    </style>
+
+    <!-- Orange  -->
+    <style name="Compat.BaseTheme.Orange" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFF57C00</item>
+        <item name="android:statusBarColor">#EEF57C00</item>
+    </style>
+
+    <!-- DeepOrange  -->
+    <style name="Compat.BaseTheme.DeepOrange" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FFE64A19</item>
+        <item name="android:statusBarColor">#EEE64A19</item>
+    </style>
+
+    <!-- Brown  -->
+    <style name="Compat.BaseTheme.Brown" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF5D4037</item>
+        <item name="android:statusBarColor">#EE5D4037</item>
+    </style>
+
+    <!-- Grey  -->
+    <style name="Compat.BaseTheme.Grey" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF616161</item>
+        <item name="android:statusBarColor">#EE616161</item>
+    </style>
+
+    <!-- BlueGrey  -->
+    <style name="Compat.BaseTheme.BlueGrey" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF455A64</item>
+        <item name="android:statusBarColor">#EE455A64</item>
+    </style>
+
+</resources>

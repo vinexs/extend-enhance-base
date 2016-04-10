@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#F00" >
+
+	<LinearLayout
+		android:id="@+id/lib_scanner_surface_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical" >
+
+		<SurfaceView
+			android:id="@+id/lib_scanner_surface"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:keepScreenOn="true" />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center_horizontal|center_vertical"
+		android:orientation="vertical" >
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal|center_vertical" >
+
+			<ImageView
+				android:layout_width="300dp"
+				android:layout_height="300dp"
+				android:scaleType="fitXY"
+				android:background="@drawable/scanner_scanning_area" />
+
+			<ImageView
+				android:id="@+id/lib_scanner_scanning_bar"
+				android:layout_width="250dp"
+				android:layout_height="10dp"
+				android:layout_margin="25dp"
+				android:src="@drawable/scanner_scanning_light" />
+
+		</RelativeLayout>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal|center_vertical" >
+
+			<ImageButton
+				android:id="@+id/lib_scanner_btn_flip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone" />
+
+			<ImageButton
+				android:id="@+id/lib_scanner_btn_capture"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</RelativeLayout>

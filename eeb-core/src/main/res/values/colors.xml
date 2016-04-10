@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Simple Color -->
+
+    <item type="color" name="white">#FFFFFF</item>
+    <item type="color" name="abc_white">#CCFFFFFF</item>
+
+    <item type="color" name="dark">#000000</item>
+    <item type="color" name="abc_dark">#CC000000</item>
+
+    <color name="actionbar_background">#FF0000</color>
+    <color name="color_title">#00FF00</color>
+
+
+
+
+</resources>
