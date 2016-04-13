@@ -1,0 +1,38 @@
+# =========================
+# Windows System Files
+# =========================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Mac OSX System Files
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# =========================
+# Android Studio Files
+# =========================
+
+.gradle/
+.idea/
+build/
+gradle/
+Extend-Enhance-Base.iml
+gradle.properties
+gradlew
+gradlew.bat
+local.properties
+settings.gradle
+
+eeb-camera/build/
+eeb-camera/eeb-camera.iml
+
+eeb-core/build/
+eeb-core/eeb-core.iml
+
+eeb-net/build/
+eeb-net/eeb-net.iml
