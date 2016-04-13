@@ -260,7 +260,9 @@
     <!-- ================================ -->
 
     <style name="BasePreferenceTheme" parent="PreferenceThemeOverlay">
-        <item name="numberPickerPreferenceStyle">@style/Preference.DialogPreference.NumberPickerPreference</item>
+        <item name="numberPickerPreferenceStyle">
+            @style/Preference.DialogPreference.NumberPickerPreference
+        </item>
     </style>
 
     <style name="Preference.DialogPreference.NumberPickerPreference">

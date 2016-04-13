@@ -29,7 +29,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -180,6 +179,15 @@ public class Utility {
         } catch (Exception e) {
             Log.e("Package", "Fail to get version code.", e);
             return 1;
+        }
+    }
+
+    public static int getThemeResId(Context context) {
+        try {
+            return context.getApplicationInfo().theme;
+        } catch (Exception e) {
+            Log.e("Package", "Fail to get default theme", e);
+            return 0;
         }
     }
 
@@ -385,7 +393,7 @@ public class Utility {
 
     public static Map<String, String> queryToArrayMap(String str) {
         Map<String, String> args;
-        args = new LinkedHashMap<String, String>();
+        args = new LinkedHashMap<>();
         String[] varPair = str.split("&");
         for (String var : varPair) {
             String[] thisVar = var.split("=");

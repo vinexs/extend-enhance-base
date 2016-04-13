@@ -166,11 +166,11 @@ public abstract class BaseFragment extends Fragment {
         FragmentManager fragMgr = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragMgr.beginTransaction();
         FragmentManager.BackStackEntry lastEntry = fragMgr.getBackStackEntryCount() == 0 ?
-                null :fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
+                null : fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
         // Transaction options
         String fragName = fragment.getClass().getSimpleName();
-        String breadCrumbTitle = "";
-        String breadCrumbShortTitle = "";
+        String breadCrumbTitle;
+        String breadCrumbShortTitle;
         int animationEnter = 0;
         int animationExit = 0;
         Boolean addToBackStack = false;
@@ -233,11 +233,11 @@ public abstract class BaseFragment extends Fragment {
         FragmentManager fragMgr = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragMgr.beginTransaction();
         FragmentManager.BackStackEntry lastEntry = fragMgr.getBackStackEntryCount() == 0 ?
-                null :fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
+                null : fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
         // Transaction options
         String fragName = fragment.getClass().getSimpleName();
-        String breadCrumbTitle = "";
-        String breadCrumbShortTitle = "";
+        String breadCrumbTitle;
+        String breadCrumbShortTitle;
         int animationEnter = 0;
         int animationExit = 0;
         Boolean addToBackStack = true;

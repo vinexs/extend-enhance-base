@@ -58,7 +58,7 @@ import javax.xml.parsers.SAXParserFactory;
  * XML parser, parse standard XML to JSONObject or JSON Stringify.
  * To fix that org.json components conflict with android internal library.
  * This parser use org.w3c.dom component to re-format XML and put data to JSONObject.
- * <p/>
+ * <p>
  * Dependence on com.vinexs.tool.Determinator
  */
 @SuppressWarnings("unused")
@@ -647,8 +647,7 @@ public class XML {
                     text.append(Element.TO_STRING_SPACE).append(key).append(Element.TO_STRING_EQUALS_QUOTE).append(this.attributes.get(key)).append(Element.TO_STRING_DOUBLE_QUOTE);
                 }
             }
-            if ((this.children == null) && TextUtils.isEmpty(this.value))
-            {
+            if ((this.children == null) && TextUtils.isEmpty(this.value)) {
                 text.append(Element.TO_STRING_BRACKET_END_SLASH);
             } else {
                 text.append(Element.TO_STRING_BRACKET_END);
