@@ -162,4 +162,10 @@
         <item name="android:statusBarColor">#EE455A64</item>
     </style>
 
+    <!-- Black  -->
+    <style name="Compat.BaseTheme.Black" parent="BaseTheme.NoActionBar">
+        <item name="android:navigationBarColor">#FF000000</item>
+        <item name="android:statusBarColor">#FF000000</item>
+    </style>
+
 </resources>

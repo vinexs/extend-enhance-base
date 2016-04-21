@@ -248,6 +248,15 @@
         <item name="colorAccent">#FF4FC3F7</item>
     </style>
 
+    <!-- Black  -->
+    <style name="Compat.BaseTheme.Black" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Black" parent="Compat.BaseTheme.Black">
+        <item name="colorPrimary">#FF212121</item>
+        <item name="colorPrimaryDark">#FF000000</item>
+        <item name="colorAccent">#FFEC407A</item>
+    </style>
+
     <!-- Dialog Style -->
     <!-- ================================ -->
     <style name="fullScreen.Window" parent="@style/Theme.AppCompat">
