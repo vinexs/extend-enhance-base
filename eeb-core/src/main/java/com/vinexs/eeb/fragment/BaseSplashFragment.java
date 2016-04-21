@@ -119,7 +119,7 @@ public abstract class BaseSplashFragment extends BaseFragment {
                     afterExecute();
                 } else {
                     int delayMillis = (int) (getSplashLength() - usedTime);
-                    Log.d(TAG, "Splash closed after "+ delayMillis +" milliseconds. ");
+                    Log.d(TAG, "Splash closed after " + delayMillis + " milliseconds. ");
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

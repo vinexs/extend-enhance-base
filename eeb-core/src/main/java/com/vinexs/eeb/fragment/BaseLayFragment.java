@@ -47,7 +47,9 @@ public abstract class BaseLayFragment extends BaseFragment {
         return mDialog;
     }
 
-    /** @hide */
+    /**
+     * @hide
+     */
     @Override
     public LayoutInflater getLayoutInflater(Bundle savedInstanceState) {
         if (!mShowsDialog) {

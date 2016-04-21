@@ -34,7 +34,7 @@ public class ChineseTranslator {
     public static String toSimplify(String string) {
         StringBuilder sb = new StringBuilder(string.length());
         for (int i = 0, length = string.length(); i < length; i++) {
-            String chr = ""+string.charAt(i);
+            String chr = "" + string.charAt(i);
             int tradIndex = traditional.indexOf(chr);
             if (tradIndex >= 0) {
                 sb.append(simplify.charAt(tradIndex));

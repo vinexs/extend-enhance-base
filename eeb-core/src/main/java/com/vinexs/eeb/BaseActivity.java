@@ -82,7 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setOverflowMenuAvailable();
         setCustomSetting();
-        setDefaultContentFrame();
+        setContentFrame();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawerLayout != null) {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
@@ -138,9 +138,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // ================  Default layout frame  =========================
 
-    public void setDefaultContentFrame() {
-        setContentView(R.layout.default_activity_frame);
+    public void setContentFrame() {
+        setContentView(getContentFrame());
     }
+
+    public abstract int getContentFrame();
 
     protected void setToolbar(int resId) {
         Toolbar toolbar = (Toolbar) findViewById(resId);
@@ -431,11 +433,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         FragmentManager fragMgr = getSupportFragmentManager();
         FragmentTransaction transaction = fragMgr.beginTransaction();
         BackStackEntry lastEntry = fragMgr.getBackStackEntryCount() == 0 ?
-                null :fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
+                null : fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
         // Transaction options
         String fragName = fragment.getClass().getSimpleName();
-        String breadCrumbTitle = "";
-        String breadCrumbShortTitle = "";
+        String breadCrumbTitle;
+        String breadCrumbShortTitle;
         Boolean addToBackStack = false;
         int animationEnter = 0;
         int animationExit = 0;
@@ -498,11 +500,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         FragmentManager fragMgr = getSupportFragmentManager();
         FragmentTransaction transaction = fragMgr.beginTransaction();
         BackStackEntry lastEntry = fragMgr.getBackStackEntryCount() == 0 ?
-                null :fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
+                null : fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
         // Transaction options
         String fragName = fragment.getClass().getSimpleName();
-        String breadCrumbTitle = "";
-        String breadCrumbShortTitle = "";
+        String breadCrumbTitle;
+        String breadCrumbShortTitle;
         Boolean addToBackStack = true;
         int animationEnter = 0;
         int animationExit = 0;

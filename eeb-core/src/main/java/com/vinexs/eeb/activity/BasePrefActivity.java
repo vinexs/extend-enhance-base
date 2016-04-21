@@ -48,7 +48,7 @@ public abstract class BasePrefActivity extends BaseActivity {
 
         // Add default toolbar to holder.
         LayoutInflater inflater = LayoutInflater.from(this);
-        AppBarLayout toolbarView = (AppBarLayout) inflater.inflate(R.layout.default_toolbar, null);
+        AppBarLayout toolbarView = (AppBarLayout) inflater.inflate(R.layout.toolbar, null);
         parentView.addView(toolbarView);
 
         // Add frame layout to holder below toolbar.

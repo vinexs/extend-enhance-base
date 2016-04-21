@@ -26,7 +26,9 @@
     <!-- ================================ -->
 
     <style name="BasePreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
-        <item name="numberPickerPreferenceStyle">@style/Preference.DialogPreference.NumberPickerPreference.Material</item>
+        <item name="numberPickerPreferenceStyle">
+            @style/Preference.DialogPreference.NumberPickerPreference.Material
+        </item>
         <item name="android:listPreferredItemPaddingLeft">16dp</item>
         <item name="android:listPreferredItemPaddingRight">16dp</item>
         <item name="android:listPreferredItemPaddingStart" tools:targetApi="17">16dp</item>
