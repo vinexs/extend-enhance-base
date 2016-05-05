@@ -11,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -18,6 +19,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -84,7 +86,7 @@ public class EnhancedHttp {
     }
 
     public EnhancedHttp setUserAgent(String agent) {
-        String userAgent = "Mozilla/5.0(Linux; Android; EEB;)";
+        String userAgent = "Mozilla/5.0(Linux; Android; EEB)";
         requestProperty.put("User-Agent", userAgent);
         return this;
     }
@@ -99,7 +101,7 @@ public class EnhancedHttp {
     }
 
     public void get(String url, LinkedHashMap<String, Object> vars, OnResponseListener response) {
-        for (Map.Entry<String,Object> variable : vars.entrySet()) {
+        for (Map.Entry<String, Object> variable : vars.entrySet()) {
             if (!(variable.getValue() instanceof java.io.File)) {
                 data.put(variable.getKey(), variable.getValue().toString());
             }
@@ -116,12 +118,12 @@ public class EnhancedHttp {
     }
 
     public void post(String url, LinkedHashMap<String, Object> vars, OnResponseListener response) {
-        for (Map.Entry<String,Object> variable : vars.entrySet()) {
+        for (Map.Entry<String, Object> variable : vars.entrySet()) {
             if (variable.getValue() instanceof java.io.File) {
-                if (!((File)variable.getValue()).exists()) {
+                if (!((File) variable.getValue()).exists()) {
                     continue;
                 }
-                files.put(variable.getKey(), (File)variable.getValue());
+                files.put(variable.getKey(), (File) variable.getValue());
                 useMethod = EnhancedHttp.METHOD_POST_MULTIPART;
             } else {
                 data.put(variable.getKey(), variable.getValue().toString());
@@ -156,14 +158,13 @@ public class EnhancedHttp {
                     } else {
                         conn = (HttpsURLConnection) urlconn.openConnection();
                     }
-                    if (responseListener != null) {
-                        conn.setDoInput(true);
-                    }
+                    conn.setDoInput(responseListener != null);
                     conn.setInstanceFollowRedirects(allowRedirect);
                     conn.setUseCaches(!noCache);
                     conn.setRequestProperty("charset", "utf-8");
+                    conn.setRequestProperty("Accept-Encoding", "gzip");
                     if (requestProperty.size() > 0) {
-                        for (Map.Entry<String,String> request : requestProperty.entrySet()) {
+                        for (Map.Entry<String, String> request : requestProperty.entrySet()) {
                             conn.setRequestProperty(request.getKey(), request.getValue());
                         }
                     }
@@ -179,7 +180,7 @@ public class EnhancedHttp {
                             if (!files.isEmpty()) {
                                 for (Map.Entry<String, File> file : files.entrySet()) {
                                     if (!file.getValue().exists()) {
-                                        Log.e(TAG, "File dropped. ["+ file.getValue().toString() +"]");
+                                        Log.e(TAG, "File dropped. [" + file.getValue().toString() + "]");
                                         continue;
                                     }
                                     multipartAddFile(multipartOutputStream, file.getKey(), file.getValue());
@@ -195,7 +196,6 @@ public class EnhancedHttp {
                         case EnhancedHttp.METHOD_POST:
                             conn.setRequestMethod("POST");
                             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                            conn.setRequestProperty("charset", "utf-8");
                             if (!data.isEmpty()) {
                                 byte[] postData = getQueryStr().getBytes("UTF-8");
                                 conn.setDoOutput(true);
@@ -217,7 +217,10 @@ public class EnhancedHttp {
                     StringBuilder stringBuilder = new StringBuilder();
                     if (responseListener != null) {
                         String line;
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        InputStream inputStream =
+                                (conn instanceof HttpsURLConnection && "gzip".equals(conn.getContentEncoding())) ?
+                                        new GZIPInputStream(conn.getInputStream()) : conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                         while ((line = reader.readLine()) != null) {
                             stringBuilder.append(line).append("\n");
                         }
@@ -231,18 +234,19 @@ public class EnhancedHttp {
                     try {
                         htmlStatusCode = conn.getResponseCode();
                         conn.disconnect();
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                     return null;
                 }
             }
 
             @Override
             protected void onPostExecute(String htmlResponse) {
-                if (responseListener != null ) {
+                if (responseListener != null) {
                     if (htmlStatusCode == HttpURLConnection.HTTP_OK) {
                         responseListener.onSuccess(context, htmlResponse);
                     } else {
-                        Log.e("EnhancedHttp", conn.getURL().toString() +" response error "+ htmlStatusCode);
+                        Log.e("EnhancedHttp", conn.getURL().toString() + " response error " + htmlStatusCode);
                         responseListener.onError(context, htmlStatusCode);
                     }
                 }
@@ -254,18 +258,18 @@ public class EnhancedHttp {
     public void multipartAddParam(DataOutputStream outputStream, String name, String value) throws IOException {
         outputStream.writeBytes("--" + BOUNDARY + LINE_FEED);
         outputStream.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"" + LINE_FEED);
-        outputStream.writeBytes("Content-Type: text/plain; chart=utf8" +LINE_FEED);
+        outputStream.writeBytes("Content-Type: text/plain; chart=utf8" + LINE_FEED);
         outputStream.writeBytes(LINE_FEED);
-        outputStream.writeBytes(value +LINE_FEED);
+        outputStream.writeBytes(value + LINE_FEED);
         outputStream.writeBytes("--" + BOUNDARY + LINE_FEED + LINE_FEED);
     }
 
     public void multipartAddFile(DataOutputStream outputStream, String name, File file) throws IOException {
         String fileName = file.getName();
-        outputStream.writeBytes("--"+ BOUNDARY +LINE_FEED);
-        outputStream.writeBytes("Content-Disposition: form-data; name=\""+ name +"\";filename=\""+ fileName +"\"" +LINE_FEED);
-        outputStream.writeBytes("Content-Type: "+ HttpURLConnection.guessContentTypeFromName(fileName) +LINE_FEED);
-        outputStream.writeBytes("Content-Transfer-Encoding: binary" +LINE_FEED);
+        outputStream.writeBytes("--" + BOUNDARY + LINE_FEED);
+        outputStream.writeBytes("Content-Disposition: form-data; name=\"" + name + "\";filename=\"" + fileName + "\"" + LINE_FEED);
+        outputStream.writeBytes("Content-Type: " + HttpURLConnection.guessContentTypeFromName(fileName) + LINE_FEED);
+        outputStream.writeBytes("Content-Transfer-Encoding: binary" + LINE_FEED);
         outputStream.writeBytes(LINE_FEED);
         byte[] fileByte = new byte[(int) file.length()];
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -274,7 +278,7 @@ public class EnhancedHttp {
         fileInputStream.close();
         outputStream.write(fileByte);
         outputStream.writeBytes(LINE_FEED);
-        outputStream.writeBytes("--" + BOUNDARY + LINE_FEED +LINE_FEED);
+        outputStream.writeBytes("--" + BOUNDARY + LINE_FEED + LINE_FEED);
     }
 
     public String getQueryStr() {
@@ -292,14 +296,15 @@ public class EnhancedHttp {
                 postData.append('=');
                 postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
-                Log.e("EnhancedHttp", "Variable ["+ param.getKey() + "] fail to encode.");
+                Log.e("EnhancedHttp", "Variable [" + param.getKey() + "] fail to encode.");
             }
         }
         return postData.toString();
     }
 
-    public interface OnResponseListener{
+    public interface OnResponseListener {
         void onSuccess(Context context, String response);
+
         void onError(Context context, int stateCode);
     }
 
