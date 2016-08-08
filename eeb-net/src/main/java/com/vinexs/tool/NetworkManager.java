@@ -171,7 +171,13 @@ public class NetworkManager {
     public static String getSSID(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService (Context.WIFI_SERVICE);
         WifiInfo info = wifiManager.getConnectionInfo ();
-        return info.getBSSID ();
+        return info.getSSID();
+    }
+
+    public static String getBSSID(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = wifiManager.getConnectionInfo();
+        return info.getBSSID();
     }
 
     public static InetAddress intToInet(int value) {

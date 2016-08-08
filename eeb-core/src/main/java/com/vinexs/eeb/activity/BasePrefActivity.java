@@ -35,8 +35,7 @@ public abstract class BasePrefActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void setContentFrame() {
+    public void setDefaultContentFrame() {
         FrameLayout rootView = (FrameLayout) findViewById(android.R.id.content);
 
         // Perpare linear layout for holder parent.
@@ -60,10 +59,6 @@ public abstract class BasePrefActivity extends BaseActivity {
         parentView.addView(containerFrame);
 
         rootView.addView(parentView);
-    }
-
-    public int getContentFrame() {
-        return 0;
     }
 
     @Override
