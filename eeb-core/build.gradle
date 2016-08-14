@@ -25,7 +25,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         minSdkVersion 11
@@ -55,7 +55,7 @@ android {
             proguardFiles 'proguard-rules.pro'
             debuggable false
         }
-        internalRelease {
+        internal {
             minifyEnabled false
             proguardFiles 'proguard-rules.pro'
             debuggable true
