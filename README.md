@@ -28,7 +28,26 @@ compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.4'
 Step 3. Select a default theme in Manifest.xml. There are some preset theme could use.
 ```
 BaseTheme.Dark
-...
+BaseTheme.RoseRed
+BaseTheme.Pink
+BaseTheme.Purple
+BaseTheme.DeepPurple
+BaseTheme.Indigo
+BaseTheme.Blue
+BaseTheme.LightBlue
+BaseTheme.Cyan
+BaseTheme.Teal
+BaseTheme.Green
+BaseTheme.LightGreen
+BaseTheme.Lime
+BaseTheme.Yellow
+BaseTheme.Amber
+BaseTheme.Orange
+BaseTheme.DeepOrange
+BaseTheme.Brown
+BaseTheme.Grey
+BaseTheme.BlueGrey
+BaseTheme.Black
 ```
 
 ... to be continue.
