@@ -50,7 +50,17 @@ BaseTheme.BlueGrey
 BaseTheme.Black
 ```
 
-... to be continue.
+Step 4. Make your MainActivity extends from com.vinexs.eeb.BaseActivity
+```java
+public class MainActivity extends BaseActivity {...}
+```
+Fragment can extends from BaseFragment.
+```java
+public class MyFragment extends BaseFragment {...}
+```
+
+
+
 
 
 
