@@ -218,7 +218,7 @@ public class EnhancedHttp {
                     if (responseListener != null) {
                         String line;
                         InputStream inputStream =
-                                (conn instanceof HttpsURLConnection && "gzip".equals(conn.getContentEncoding())) ?
+                                ("gzip".equals(conn.getContentEncoding())) ?
                                         new GZIPInputStream(conn.getInputStream()) : conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                         while ((line = reader.readLine()) != null) {
