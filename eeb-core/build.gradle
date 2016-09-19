@@ -72,20 +72,13 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Google Library
-    compile 'com.android.support:support-v4:24.2.0'
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:design:24.2.0'
-    compile 'com.android.support:preference-v7:24.2.0'
-    compile 'com.android.support:preference-v14:24.2.0'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:preference-v7:24.2.1'
+    compile 'com.android.support:preference-v14:24.2.1'
 
     // Iconics Library
+    // https://github.com/mikepenz/Android-Iconics
     compile 'com.mikepenz:iconics-core:2.8.1@aar'
-    /* Icon Sets. Paste to your app module specifically.
-    # Google Material Design Icons
-    compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
-    # Community Material Design Icons
-    compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
-    # Font Awesome
-    compile 'com.mikepenz:fontawesome-typeface:4.6.0.3@aar'
-    */
 }
