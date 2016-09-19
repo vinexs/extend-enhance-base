@@ -60,6 +60,11 @@ public abstract class BasePrefActivity extends BaseActivity {
 
         rootView.addView(parentView);
     }
+    
+    @Override
+    public int getContentFrame() {
+        return 0;
+    }
 
     @Override
     public void BackStackSyncStatus() {
