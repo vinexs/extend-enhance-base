@@ -1,4 +1,4 @@
-include ':eeb-camera', ':eeb-core', ':eeb-net'
+include ':eeb-core', ':eeb-camera', ':eeb-net'
 
 /*
  * Copyright (c) 2015. Vin @ vinexs.com (MIT License)
