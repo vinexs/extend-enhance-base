@@ -6,11 +6,11 @@ Simply extend the Enhance Class / Base Class and the hard works were done.
 Step 1. Add it in root build.gradle at the end of repositories
 ```
 allprojects {
-		repositories {
-			...
-			maven { url "https://jitpack.io" }
-		}
-  }
+	repositories {
+		...
+		maven { url "https://jitpack.io" }
+	}
+}
 ```
 Step 2. Add the dependency
 ```
