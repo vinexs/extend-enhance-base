@@ -43,18 +43,19 @@ packagingOptions {
 
 Step 4. Due to this project use JAVA 8 to compile. Add compileOptions.
 ```
-compileOptions {
-	sourceCompatibility JavaVersion.VERSION_1_8
-	targetCompatibility JavaVersion.VERSION_1_8
-}
-```
-If gradle notify "Jack is required to support java 8 language feature" error. Add the following to defaultConfig{}
-```
-defaultConfig {
+android {
 	...
-	jackOptions {
-		enabled true
-        }
+	defaultConfig {
+		...
+		jackOptions {
+			enabled true
+		}
+	}
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
 }
 ```
 
