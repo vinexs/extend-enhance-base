@@ -25,12 +25,8 @@ compile 'com.github.vinexs.extend-enhance-base:eeb-camera:1.0.6b'
 compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.6b'
 ```
 
-Step 3. Add compileOptions & packagingOption to avoid compile error.
+Step 3. Add packagingOption to avoid compile error.
 ```
-compileOptions {
-	sourceCompatibility JavaVersion.VERSION_1_8
-	targetCompatibility JavaVersion.VERSION_1_8
-}
 packagingOptions {
 	exclude 'META-INF/DEPENDENCIES.txt'
 	exclude 'META-INF/LICENSE.txt'
@@ -44,6 +40,14 @@ packagingOptions {
 	exclude 'META-INF/LGPL2.1'
 }
 ```
+
+Step 4. Due to this project use JAVA 8 to compile. Add compileOptions.
+```
+compileOptions {
+	sourceCompatibility JavaVersion.VERSION_1_8
+	targetCompatibility JavaVersion.VERSION_1_8
+}
+```
 If gradle notify "Jack is required to support java 8 language feature" error. Add the following to defaultConfig{}
 ```
 defaultConfig {
@@ -54,7 +58,7 @@ defaultConfig {
 }
 ```
 
-Step 4. Select a default theme in Manifest.xml. There are some preset theme could use.
+Step 5. Select a default theme in Manifest.xml. There are some preset theme could use.
 ```
 BaseTheme.Dark
 BaseTheme.RoseRed
@@ -79,7 +83,7 @@ BaseTheme.BlueGrey
 BaseTheme.Black
 ```
 
-Step 4. Make your MainActivity extends from com.vinexs.eeb.BaseActivity
+Step 6. Make your MainActivity extends from com.vinexs.eeb.BaseActivity
 ```java
 public class MainActivity extends BaseActivity {...}
 ```
