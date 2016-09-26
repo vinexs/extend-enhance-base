@@ -25,41 +25,27 @@ compile 'com.github.vinexs.extend-enhance-base:eeb-camera:1.0.6b'
 compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.6b'
 ```
 
-Step 3. Add packagingOption to avoid compile error.
-```
-packagingOptions {
-	exclude 'META-INF/DEPENDENCIES.txt'
-	exclude 'META-INF/LICENSE.txt'
-	exclude 'META-INF/NOTICE.txt'
-	exclude 'META-INF/NOTICE'
-	exclude 'META-INF/LICENSE'
-	exclude 'META-INF/DEPENDENCIES'
-	exclude 'META-INF/notice.txt'
-	exclude 'META-INF/license.txt'
-	exclude 'META-INF/dependencies.txt'
-	exclude 'META-INF/LGPL2.1'
-}
-```
-
-Step 4. Due to this project use JAVA 8 to compile. Add compileOptions.
+Step 3. Add packagingOption in your module build.gradle to avoid compile error.
 ```
 android {
 	...
-	defaultConfig {
-		...
-		jackOptions {
-			enabled true
-		}
+	packagingOptions {
+		exclude 'META-INF/DEPENDENCIES.txt'
+		exclude 'META-INF/LICENSE.txt'
+		exclude 'META-INF/NOTICE.txt'
+		exclude 'META-INF/NOTICE'
+		exclude 'META-INF/LICENSE'
+		exclude 'META-INF/DEPENDENCIES'
+		exclude 'META-INF/notice.txt'
+		exclude 'META-INF/license.txt'
+		exclude 'META-INF/dependencies.txt'
+		exclude 'META-INF/LGPL2.1'
 	}
-
-	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
-	}
+	...
 }
 ```
 
-Step 5. Select a default theme in Manifest.xml. There are some preset theme could use.
+Step 4. Select a default theme in Manifest.xml. There are some preset theme could use.
 ```
 BaseTheme.Dark
 BaseTheme.RoseRed
@@ -84,7 +70,7 @@ BaseTheme.BlueGrey
 BaseTheme.Black
 ```
 
-Step 6. Make your MainActivity extends from com.vinexs.eeb.BaseActivity
+Step 5. Make your MainActivity extends from com.vinexs.eeb.BaseActivity
 ```java
 public class MainActivity extends BaseActivity {...}
 ```
