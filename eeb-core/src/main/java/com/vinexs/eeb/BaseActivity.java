@@ -139,7 +139,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     // ================  Default layout frame  =========================
 
     public void setContentFrame() {
-        setContentView(getContentFrame());
+        int layoutResId = getContentFrame();
+        if (layoutResId > 0) {
+            setContentView(layoutResId);
+        }
     }
 
     public abstract int getContentFrame();

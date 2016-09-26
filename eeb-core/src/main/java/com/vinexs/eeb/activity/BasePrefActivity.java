@@ -35,10 +35,10 @@ public abstract class BasePrefActivity extends BaseActivity {
         }
     }
 
-    public void setDefaultContentFrame() {
+    public void setPreferenceFrame() {
         FrameLayout rootView = (FrameLayout) findViewById(android.R.id.content);
 
-        // Perpare linear layout for holder parent.
+        // Prepare linear layout for holder parent.
         LinearLayout parentView = new LinearLayout(this);
         LinearLayout.LayoutParams parentParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -63,6 +63,7 @@ public abstract class BasePrefActivity extends BaseActivity {
     
     @Override
     public int getContentFrame() {
+        setPreferenceFrame();
         return 0;
     }
 
