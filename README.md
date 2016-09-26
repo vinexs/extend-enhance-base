@@ -22,8 +22,12 @@ dependencies {
 
 There are other modules could be use.
 ```
-compile 'com.github.vinexs.extend-enhance-base:eeb-camera:1.0.6b'
-compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.6b'
+dependencies {
+	...
+	compile 'com.github.vinexs.extend-enhance-base:eeb-camera:1.0.6b'
+	compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.6b'
+	...
+}
 ```
 
 ## Method 2:
@@ -43,8 +47,10 @@ project(':eeb-net').projectDir = new File(eebDir, 'eeb-camera')
 Step 3. Add those module to your module dependencies.
 ```
 dependencies {
+	...
 	compile project(':eeb-core')
 	compile project(':eeb-net')
+	...
 }
 ```
 
