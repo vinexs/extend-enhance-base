@@ -16,7 +16,7 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	compile 'com.github.vinexs.extend-enhance-base:eeb-core:1.0.6b'
+	compile 'com.github.vinexs.extend-enhance-base:eeb-core:1.0.6c'
 }
 ```
 
@@ -24,8 +24,8 @@ There are other modules could be use.
 ```
 dependencies {
 	...
-	compile 'com.github.vinexs.extend-enhance-base:eeb-camera:1.0.6b'
-	compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.6b'
+	compile 'com.github.vinexs.extend-enhance-base:eeb-camera:1.0.6c'
+	compile 'com.github.vinexs.extend-enhance-base:eeb-net:1.0.6c'
 	...
 }
 ```
