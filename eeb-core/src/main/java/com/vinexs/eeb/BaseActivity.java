@@ -51,6 +51,7 @@ import android.widget.Toast;
 import com.vinexs.BuildConfig;
 import com.vinexs.R;
 import com.vinexs.eeb.misc.BaseExceptionHandler;
+import com.vinexs.eeb.misc.BundleArgs;
 import com.vinexs.tool.Utility;
 
 import java.lang.reflect.Field;
@@ -447,27 +448,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Fill options
         Bundle args = fragment.getArguments();
         if (args != null) {
-            if (args.containsKey("animationEnter") && args.containsKey("animationExit")) {
-                animationEnter = args.getInt("animationEnter");
-                animationExit = args.getInt("animationExit");
+            if (args.containsKey(BundleArgs.animationEnter) && args.containsKey(BundleArgs.animationExit)) {
+                animationEnter = args.getInt(BundleArgs.animationEnter);
+                animationExit = args.getInt(BundleArgs.animationExit);
             }
-            if (args.containsKey("breadCrumbTitle")) {
-                breadCrumbTitle = args.getString("breadCrumbTitle");
+            if (args.containsKey(BundleArgs.breadCrumbTitle)) {
+                breadCrumbTitle = args.getString(BundleArgs.breadCrumbTitle);
             } else {
                 breadCrumbTitle = (lastEntry != null) ?
                         lastEntry.getBreadCrumbTitle().toString() : Utility.getAppName(this);
             }
-            if (args.containsKey("breadCrumbShortTitle")) {
-                breadCrumbShortTitle = args.getString("breadCrumbShortTitle");
+            if (args.containsKey(BundleArgs.breadCrumbShortTitle)) {
+                breadCrumbShortTitle = args.getString(BundleArgs.breadCrumbShortTitle);
             } else {
                 breadCrumbShortTitle = (lastEntry != null) ?
                         lastEntry.getBreadCrumbShortTitle().toString() : Utility.getAppName(this);
             }
-            if (args.containsKey("fragmentName")) {
-                fragName = args.getString("fragmentName");
+            if (args.containsKey(BundleArgs.fragmentName)) {
+                fragName = args.getString(BundleArgs.fragmentName);
             }
-            if (args.containsKey("addToBackStack")) {
-                addToBackStack = args.getBoolean("addToBackStack");
+            if (args.containsKey(BundleArgs.addToBackStack)) {
+                addToBackStack = args.getBoolean(BundleArgs.addToBackStack);
             }
         } else {
             breadCrumbTitle = (lastEntry != null) ?
@@ -514,27 +515,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Fill options
         Bundle args = fragment.getArguments();
         if (args != null) {
-            if (args.containsKey("animationEnter") && args.containsKey("animationExit")) {
-                animationEnter = args.getInt("animationEnter");
-                animationExit = args.getInt("animationExit");
+            if (args.containsKey(BundleArgs.animationEnter) && args.containsKey(BundleArgs.animationExit)) {
+                animationEnter = args.getInt(BundleArgs.animationEnter);
+                animationExit = args.getInt(BundleArgs.animationExit);
             }
-            if (args.containsKey("breadCrumbTitle")) {
-                breadCrumbTitle = args.getString("breadCrumbTitle");
+            if (args.containsKey(BundleArgs.breadCrumbTitle)) {
+                breadCrumbTitle = args.getString(BundleArgs.breadCrumbTitle);
             } else {
                 breadCrumbTitle = (lastEntry != null) ?
                         lastEntry.getBreadCrumbTitle().toString() : Utility.getAppName(this);
             }
-            if (args.containsKey("breadCrumbShortTitle")) {
-                breadCrumbShortTitle = args.getString("breadCrumbShortTitle");
+            if (args.containsKey(BundleArgs.breadCrumbShortTitle)) {
+                breadCrumbShortTitle = args.getString(BundleArgs.breadCrumbShortTitle);
             } else {
                 breadCrumbShortTitle = (lastEntry != null) ?
                         lastEntry.getBreadCrumbShortTitle().toString() : Utility.getAppName(this);
             }
-            if (args.containsKey("fragmentName")) {
-                fragName = args.getString("fragmentName");
+            if (args.containsKey(BundleArgs.fragmentName)) {
+                fragName = args.getString(BundleArgs.fragmentName);
             }
-            if (args.containsKey("addToBackStack")) {
-                addToBackStack = args.getBoolean("addToBackStack");
+            if (args.containsKey(BundleArgs.addToBackStack)) {
+                addToBackStack = args.getBoolean(BundleArgs.addToBackStack);
             }
         } else {
             breadCrumbTitle = (lastEntry != null) ?
@@ -583,7 +584,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.remove(fragment).commitAllowingStateLoss();
         Bundle args = fragment.getArguments();
-        if (args != null && args.containsKey("breadCrumbTitle")) {
+        if (args != null && args.containsKey(BundleArgs.breadCrumbTitle)) {
             manager.popBackStack();
         }
     }
