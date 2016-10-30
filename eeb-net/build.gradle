@@ -24,7 +24,8 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25"
+    buildToolsVersion "25.0.0"
+
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
@@ -54,10 +55,6 @@ android {
 
 dependencies {
     compile project(':eeb-core')
-
-    // Networking Library
-    compile('org.apache.httpcomponents:httpmime:4.5.2') { exclude module: 'httpclient' }
-    compile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
 
     // Google Play Services GCM
     compile 'com.google.android.gms:play-services-gcm:9.8.0'
