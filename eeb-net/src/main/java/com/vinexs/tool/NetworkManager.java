@@ -29,17 +29,12 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.apache.http.conn.util.InetAddressUtilsHC4;
-
 import java.io.DataOutputStream;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class NetworkManager {
@@ -47,16 +42,16 @@ public class NetworkManager {
     public static boolean haveNetwork(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-        return (netInfo!=null && netInfo.isConnected());
+        return (netInfo != null && netInfo.isConnected());
     }
 
     public static void haveInternet(Context context, final OnInternetResponseListener listener) {
-        if (!haveNetwork(context)) {
-            listener.onResponsed(false);
+        if (!NetworkManager.haveNetwork(context)) {
+            listener.onResponse(false);
             return;
         }
         Log.d("Network", "Check internet is reachable ...");
-        new AsyncTask<Void,Integer, Boolean>(){
+        new AsyncTask<Void, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
                 try {
@@ -69,7 +64,7 @@ public class NetworkManager {
                     conn.setConnectTimeout(3500);
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
+                    conn.setRequestMethod("GET");
                     DataOutputStream postOutputStream = new DataOutputStream(conn.getOutputStream());
                     postOutputStream.write('\n');
                     postOutputStream.close();
@@ -85,9 +80,13 @@ public class NetworkManager {
 
             @Override
             protected void onPostExecute(Boolean result) {
-                listener.onResponsed(result);
+                listener.onResponse(result);
             }
         }.execute();
+    }
+
+    public interface OnInternetResponseListener {
+        void onResponse(boolean haveInternet);
     }
 
     public static boolean isWifiNetwork(Context context) {
@@ -95,36 +94,12 @@ public class NetworkManager {
         return info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI;
     }
 
-    public static InetAddress getInetAddress(Context context) {
-        if (haveNetwork(context)) {
-            return null;
-        }
-        if (isWifiNetwork(context)) {
-            int ipAddress = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getIpAddress();
-            if (ipAddress == 0) {
-                return null;
-            }
-            return intToInet(ipAddress);
-        }
-        try {
-            Enumeration<NetworkInterface> netinterfaces = NetworkInterface.getNetworkInterfaces();
-            while (netinterfaces.hasMoreElements()) {
-                NetworkInterface netinterface = netinterfaces.nextElement();
-                Enumeration<InetAddress> adresses = netinterface.getInetAddresses();
-                while (adresses.hasMoreElements()) {
-                    InetAddress address = adresses.nextElement();
-                    if (!address.isLoopbackAddress() && !address.isLinkLocalAddress()) {
-                        return address;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static boolean isMobileNetwork(Context context) {
+        NetworkInfo info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        return info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE;
     }
 
-    public static String getLocalIPAddress(){
+    public static String getLocalIPAddress() {
         try {
             InetAddress meHost = InetAddress.getLocalHost();
             return meHost.getHostAddress();
@@ -134,32 +109,21 @@ public class NetworkManager {
         }
     }
 
-    public static String getIPAddress(boolean useIPv4) {
+
+    public static String getIPAddress(Context context) {
+
+
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        byte[] bytes = BigInteger.valueOf(wInfo.getIpAddress()).toByteArray();
         try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress().toUpperCase();
-                        boolean isIPv4 = InetAddressUtilsHC4.isIPv4Address(sAddr);
-                        if (useIPv4) {
-                            if (isIPv4) {
-                                return sAddr;
-                            }
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 port suffix
-                                return delim < 0 ? sAddr : sAddr.substring(0, delim);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
+            return InetAddress.getByAddress(bytes).getHostAddress();
+        } catch (UnknownHostException e) {
             e.printStackTrace();
+            return "";
         }
-        return "";
     }
 
     public static String getMacAddress(Context context) {
@@ -169,8 +133,8 @@ public class NetworkManager {
     }
 
     public static String getSSID(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService (Context.WIFI_SERVICE);
-        WifiInfo info = wifiManager.getConnectionInfo ();
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = wifiManager.getConnectionInfo();
         return info.getSSID();
     }
 
@@ -179,27 +143,4 @@ public class NetworkManager {
         WifiInfo info = wifiManager.getConnectionInfo();
         return info.getBSSID();
     }
-
-    public static InetAddress intToInet(int value) {
-        byte[] bytes = new byte[4];
-        for (int i = 0; i < 4; i++) {
-            bytes[i] = byteOfInt(value, i);
-        }
-        try {
-            return InetAddress.getByAddress(bytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static byte byteOfInt(int value, int which) {
-        int shift = which * 8;
-        return (byte) (value >> shift);
-    }
-
-    public interface OnInternetResponseListener {
-        void onResponsed(boolean haveInternet);
-    }
-
 }
