@@ -43,7 +43,7 @@ import com.vinexs.R;
 import java.io.File;
 import java.util.List;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("unused WeakerAccess")
 public class Intents {
 
     public static final String TWITTER = "com.twitter.";
@@ -53,14 +53,13 @@ public class Intents {
     public static final String EMAIL = "com.android.email.";
     public static final String BLUETOOTH = "com.android.bluetooth.";
 
-    public static final String CAMERA_TEMP_IMG = Environment.getExternalStorageDirectory() + "/.infotoo/.temp.jpg";
-
     public static boolean isAvailable(Context context, String action) {
         final PackageManager packageManager = context.getPackageManager();
         final Intent intent = new Intent(action);
         List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
+
 
     public static boolean isAvailable(Context context, Intent intent) {
         final PackageManager packageManager = context.getPackageManager();
@@ -135,19 +134,16 @@ public class Intents {
      *
      * @return Camera intent.
      */
-    public static Intent getCamera() {
+    public static Intent getCamera(Context context) {
+        File photoCachePath;
+        String extStorageState = Environment.getExternalStorageState();
+        if (extStorageState.equals(Environment.MEDIA_MOUNTED)) {
+            photoCachePath = new File(context.getExternalFilesDir(null), "tmp.jpg");
+        } else {
+            photoCachePath = new File(context.getFilesDir(), "tmp.jpg");
+        }
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(CAMERA_TEMP_IMG);
-        File extCameraTempFolder = new File(photo.getParent());
-        if (!extCameraTempFolder.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            extCameraTempFolder.mkdirs();
-        }
-        if (photo.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            photo.delete();
-        }
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoCachePath));
         return intent;
     }
 
@@ -169,6 +165,7 @@ public class Intents {
     public static void call(Context context, String telNo) {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse(telNo));
+        //noinspection MissingPermission
         context.startActivity(intent);
     }
 
