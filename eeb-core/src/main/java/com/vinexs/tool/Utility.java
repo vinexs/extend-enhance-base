@@ -206,6 +206,7 @@ public class Utility {
                 throw new Exception("User did not grant permission.");
             }
             Pattern emailPattern = Patterns.EMAIL_ADDRESS;
+            @SuppressWarnings("MissingPermission")
             Account[] accounts = AccountManager.get(context).getAccounts();
             for (Account account : accounts) {
                 if (emailPattern.matcher(account.name).matches() && account.name.endsWith("gmail.com")) {
