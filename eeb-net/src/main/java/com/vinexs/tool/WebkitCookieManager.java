@@ -22,23 +22,17 @@
 
 package com.vinexs.tool;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
-import android.util.Log;
-import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 import java.io.IOException;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
-import java.net.HttpCookie;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -132,7 +126,7 @@ public class WebkitCookieManager extends java.net.CookieManager {
         return null;
     }
 
-    public boolean setCookie(String url, String name, String value){
+    public boolean setCookie(String url, String name, String value) {
         try {
             URL storeUrl = new URL(url);
 
@@ -145,7 +139,7 @@ public class WebkitCookieManager extends java.net.CookieManager {
             StringBuilder builder = new StringBuilder();
             builder.append(name + "=" + value + "; expires=" + date.format(cookieLife) + "; domain=" + storeUrl.getHost() + "; path=" + storeUrl.getPath() + "; ");
             if (!storeUrl.getPath().isEmpty()) {
-                builder.append(" path="+ storeUrl.getPath() +";");
+                builder.append(" path=" + storeUrl.getPath() + ";");
             } else {
                 builder.append(" path=/;");
             }
