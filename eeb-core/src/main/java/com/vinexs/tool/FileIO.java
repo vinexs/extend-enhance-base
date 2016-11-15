@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -236,12 +237,33 @@ public class FileIO {
      * Do NOT use this method to extract large size of text, it cost lot of time.
      */
     public static String getContentFromAssets(Context context, String filepath) {
-        StringBuilder returnString = new StringBuilder();
-        InputStream inputStream = null;
-        InputStreamReader inputStreamReader = null;
-        BufferedReader bufferReader = null;
         try {
-            inputStream = context.getResources().getAssets().open(filepath);
+            InputStream inputStream = context.getResources().getAssets().open(filepath);
+            return getContentFromInputStream(context, inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String getContentFromFile(Context context, File file) {
+        try {
+            if (!file.exists()) {
+                throw new Exception("No file inputted.");
+            }
+            InputStream inputStream = new FileInputStream(file);
+            return getContentFromInputStream(context, inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getContentFromInputStream(Context context, InputStream inputStream) {
+        StringBuilder returnString = new StringBuilder();
+        BufferedReader bufferReader = null;
+        InputStreamReader inputStreamReader = null;
+        try {
             inputStreamReader = new InputStreamReader(inputStream);
             bufferReader = new BufferedReader(inputStreamReader);
             String line;
@@ -265,6 +287,31 @@ public class FileIO {
             }
         }
         return returnString.toString();
+    }
+
+    public static void copyAssetsToInternal(Context context) {
+        copyAssetsToInternal(context, "");
+    }
+
+    public static void copyAssetsToInternal(Context context, String path) {
+        try {
+            String[] assets = context.getAssets().list(path);
+            File internalStorage = context.getFilesDir();
+            if (assets.length > 0) {
+                for (String asset : assets) {
+                    if (!path.equals("")) {
+                        File internalPathFolder = new File(internalStorage, path);
+                        if (!internalPathFolder.exists()) {
+                            //noinspection ResultOfMethodCallIgnored
+                            internalPathFolder.mkdirs();
+                        }
+                    }
+                    copyAssetsToLocation(context, internalStorage, new File(path, asset).toString());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void copyAssetsToLocation(Context context, File distFolder) {
@@ -298,36 +345,6 @@ public class FileIO {
         }
     }
 
-    public static void copyAssetsToInternal(Context context) {
-        copyAssetsToInternal(context, "");
-    }
-
-    public static void copyAssetsToInternal(Context context, String subFolder) {
-        String assets[];
-        String internalStorage;
-        try {
-            internalStorage = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).applicationInfo.dataDir;
-            assets = context.getAssets().list(subFolder);
-            if (assets.length == 0) {
-                if (!subFolder.equals("")) {
-                    copyFile(context.getAssets().open(subFolder), new File(internalStorage, subFolder));
-                }
-            } else {
-                String fullPath = internalStorage + "/" + subFolder;
-                File dir = new File(fullPath);
-                if (!dir.exists()) {
-                    //noinspection ResultOfMethodCallIgnored
-                    dir.mkdirs();
-                }
-                for (String asset : assets) {
-                    copyAssetsToInternal(context, fullPath + "/" + asset);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void copyFileOrDir(File source, File dest) {
         String files[];
         try {
@@ -344,7 +361,7 @@ public class FileIO {
                 }
             }
         } catch (Exception e) {
-            Log.e("CopyFile ", "Cannot copy " + source.toString());
+            Log.e("FileIO", "Cannot copy " + source.toString());
             e.printStackTrace();
         }
     }
@@ -365,7 +382,7 @@ public class FileIO {
         try {
             copyFile(new FileInputStream(source), dest);
         } catch (Exception e) {
-            Log.e("CopyFile ", "Cannot copy " + source.toString());
+            Log.e("FileIO", "Cannot copy " + source.toString());
             e.printStackTrace();
         }
     }
@@ -382,8 +399,34 @@ public class FileIO {
             out.flush();
             out.close();
         } catch (Exception e) {
-            Log.e("CopyFile ", "Cannot copy " + source.toString());
+            Log.e("FileIO", "Cannot copy " + source.toString());
             e.printStackTrace();
+        }
+    }
+
+    public static void debugShowFolderContent(File folder) {
+        debugShowFolderContent(folder, 0);
+    }
+
+    public static void debugShowFolderContent(File folder, int level) {
+        if (folder.exists()) {
+            for (String itemName : folder.list()) {
+                File subItem = new File(folder, itemName);
+                String levelStr = "|-- ";
+                if (level > 0) {
+                    for (int i = 0; i < level; i++) {
+                        levelStr = "|   " + levelStr;
+                    }
+                }
+                if (subItem.isDirectory()) {
+                    Log.d("FileIO", levelStr + subItem.getName());
+                    debugShowFolderContent(subItem, level + 1);
+                } else {
+                    Log.d("FileIO", levelStr + itemName);
+                }
+            }
+        } else {
+            Log.d("FileIO", folder.toString() + " not exist");
         }
     }
 
