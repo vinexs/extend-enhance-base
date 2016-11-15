@@ -1,6 +1,10 @@
 package com.vinexs.eeb.misc;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+
+import com.vinexs.tool.Utility;
 
 @SuppressWarnings("unused")
 public class BundleArgs {
@@ -19,9 +23,20 @@ public class BundleArgs {
 
     public static final String addToBackStack = "addToBackStack";
 
-    public static Bundle getDefault() {
+    public static Bundle getDefault(Context context) {
         Bundle bundle = new Bundle();
+
+        // Set the fragment cannot remove by back stack.
         bundle.putBoolean(BundleArgs.addToBackStack, false);
+
+        // Set application name as default name.
+        String appName = Utility.getAppName(context);
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            appName = Utility.getAppName(activity);
+        }
+        bundle.putString("breadCrumbTitle", appName);
+
         return bundle;
     }
 
