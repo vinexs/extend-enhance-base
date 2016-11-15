@@ -17,6 +17,7 @@ bin/
 gen/
 
 # Ignore gradle files
+*.iml
 .gradle/
 build/
 gradlew/
