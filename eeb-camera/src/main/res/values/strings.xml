@@ -21,4 +21,7 @@
   -->
 
 <resources>
+
+    <string name="camera_require_permission">You must grant permission to let camera work properly.</string>
+
 </resources>

@@ -148,7 +148,7 @@ public class DrawableLoader {
                                         format = Bitmap.CompressFormat.WEBP;
                                         break;
                                     default:
-                                        throw new UnknownFormatFlagsException("Cannot handle "+ fileMIME +" file.");
+                                        throw new UnknownFormatFlagsException("Cannot handle " + fileMIME + " file(" + respCode + ").");
                                 }
                                 FileOutputStream outputStream = new FileOutputStream(cacheFile);
                                 Bitmap bitmap = BitmapFactory.decodeStream(conn.getInputStream());

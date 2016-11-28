@@ -89,6 +89,7 @@ public abstract class AbstractEnhancedWebView extends WebView {
     @SuppressLint("SetJavaScriptEnabled")
     public void initialize() {
         this.setBackgroundColor(0x00000000);
+        this.setVerticalScrollBarEnabled(false);
 
         webSettings = getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -257,8 +258,10 @@ public abstract class AbstractEnhancedWebView extends WebView {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void setRequireLayerType() {
-        if (Build.VERSION.SDK_INT >= 11 /*Build.VERSION_CODES.HONEYCOMB*/ && Build.VERSION.SDK_INT < 21 /*Build.VERSION_CODES.KITKAT*/) {
-            this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }
 

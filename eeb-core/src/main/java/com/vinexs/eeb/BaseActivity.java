@@ -43,7 +43,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.SpannableString;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
@@ -65,7 +65,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static long appInitTime = Calendar.getInstance().getTimeInMillis();
     protected static BaseExceptionHandler exceptionHandler = null;
 
+    public static final int CLOSE_ACTION_NONE = 0;
+    public static final int CLOSE_DIALOG = 1;
+    public static final int CLOSE_TOAST = 2;
+
+    protected int closeAction = BaseActivity.CLOSE_DIALOG;
+
     protected boolean closeByDialog = true;
+    protected boolean closeByToast = false;
     protected boolean allowBack = true;
     protected boolean pressBackToClose = false;
 
@@ -215,43 +222,51 @@ public abstract class BaseActivity extends AppCompatActivity {
         allowBack = true;
     }
 
+    public void setCloseAction(int action) {
+        closeAction = action;
+    }
+
     public void closeAppsConfirmation() {
-        if (closeByDialog) {
-            // Close application by asking in dialog.
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(getResources().getString(R.string.app_close)
-                    .replace("app_name", Utility.getAppName(this)));
-            builder.setPositiveButton(R.string.confirm, new OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    setResult(AppCompatActivity.RESULT_CANCELED);
-                    finish();
-                }
-            });
-            builder.setNegativeButton(R.string.cancel, new OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            AppCompatDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            // Close application by double-tap back button.
-            if (!pressBackToClose) {
-                pressBackToClose = true;
-                Toast.makeText(this, getResources().getString(R.string.app_close)
-                        .replace("app_name", Utility.getAppName(this)), Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(new Runnable() {
+        switch (closeAction) {
+            case CLOSE_DIALOG:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getResources().getString(R.string.app_close)
+                        .replace("app_name", Utility.getAppName(this)));
+                builder.setPositiveButton(R.string.confirm, new OnClickListener() {
                     @Override
-                    public void run() {
-                        pressBackToClose = false;
+                    public void onClick(DialogInterface dialog, int which) {
+                        setResult(AppCompatActivity.RESULT_CANCELED);
+                        finish();
                     }
-                }, 2000);
-                return;
-            }
-            setResult(AppCompatActivity.RESULT_CANCELED);
-            finish();
+                });
+                builder.setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AppCompatDialog dialog = builder.create();
+                dialog.show();
+                break;
+            case CLOSE_TOAST:
+                if (!pressBackToClose) {
+                    pressBackToClose = true;
+                    Toast.makeText(this, getResources().getString(R.string.app_close)
+                            .replace("app_name", Utility.getAppName(this)), Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            pressBackToClose = false;
+                        }
+                    }, 2000);
+                    return;
+                }
+                setResult(RESULT_CANCELED);
+                finish();
+                break;
+            default:
+                setResult(RESULT_CANCELED);
+                finish();
         }
     }
 
@@ -263,7 +278,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             FragmentManager fragMgr = getSupportFragmentManager();
             int count = fragMgr.getBackStackEntryCount();
             if (count - 1 >= 0) {
-                Log.d("TEST", "BackStackSyncStatus::(count - 1 >= 0) == true");
                 BackStackEntry entry = fragMgr.getBackStackEntryAt(count - 1);
                 String title = (String) entry.getBreadCrumbTitle();
                 if (getSupportActionBar() != null) {
@@ -316,17 +330,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         actionbar.setTitle(title);
     }
 
+    public void setBackStackTitle(SpannableString title) {
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar == null) {
+            return;
+        }
+        actionbar.setTitle(title);
+    }
+
     public abstract void onBaseBackStackChanged(boolean noTurnBack, int entryCount);
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             switch (item.getItemId()) {
-                case android.R.id.home: // Home as up
+                case android.R.id.home:
                     onBackPressed();
                     return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+        if (drawerToggle == null) {
+            onBackPressed();
+            return true;
         }
         return drawerToggle.onOptionsItemSelected(item);
     }
@@ -408,9 +434,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         // Override application original Theme.
-        Integer appTheme = sharePref.getInt("theme", getBaseContext().getApplicationInfo().theme);
-        currentTheme = appTheme;
-        setTheme(appTheme);
+        try {
+            Integer appTheme = sharePref.getInt("theme", getBaseContext().getApplicationInfo().theme);
+            currentTheme = appTheme;
+            setTheme(appTheme);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ================  Fragments Control =========================

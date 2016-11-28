@@ -73,7 +73,7 @@ public abstract class BaseLayFragment extends BaseFragment {
         View view = getView();
         if (view != null) {
             if (view.getParent() != null) {
-                throw new IllegalStateException("DialogFragment can not be attached to a container view");
+                throw new IllegalStateException("DialogFragment can not be attached to a container view. Please use addFragment(0, fragment);");
             }
             mDialog.setContentView(view);
         }

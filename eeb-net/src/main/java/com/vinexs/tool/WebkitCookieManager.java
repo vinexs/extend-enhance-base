@@ -23,6 +23,9 @@
 package com.vinexs.tool;
 
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 
 import java.io.IOException;
@@ -42,7 +45,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public class WebkitCookieManager extends java.net.CookieManager {
 
     private android.webkit.CookieManager webkitCookieManager;
@@ -53,8 +56,15 @@ public class WebkitCookieManager extends java.net.CookieManager {
 
     public WebkitCookieManager(Context context, CookieStore store, CookiePolicy cookiePolicy) {
         super(null, cookiePolicy);
-        WebView webView = new WebView(context);
+        try {
+            WebView webView = new WebView(context);
+        } catch (Exception ignored) {
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.createInstance(context);
+        }
         webkitCookieManager = android.webkit.CookieManager.getInstance();
+        webkitCookieManager.setAcceptCookie(true);
     }
 
     @Override
@@ -70,6 +80,9 @@ public class WebkitCookieManager extends java.net.CookieManager {
             for (String headerValue : responseHeaders.get(headerKey)) {
                 webkitCookieManager.setCookie(url, headerValue);
             }
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.getInstance().sync();
         }
     }
 
@@ -87,7 +100,7 @@ public class WebkitCookieManager extends java.net.CookieManager {
 
     @Override
     public CookieStore getCookieStore() {
-        // we don't want anyone to work with this cookie store directly
+        // We don't want anyone to work with this cookie store directly
         throw new UnsupportedOperationException();
     }
 
@@ -143,8 +156,10 @@ public class WebkitCookieManager extends java.net.CookieManager {
             } else {
                 builder.append(" path=/;");
             }
-
             webkitCookieManager.setCookie(url, builder.toString());
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                CookieSyncManager.getInstance().sync();
+            }
             return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -166,6 +181,9 @@ public class WebkitCookieManager extends java.net.CookieManager {
                     webkitCookieManager.setCookie(url, data[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=" + storeUrl.getHost() + "; path=" + storeUrl.getPath() + "; ");
                     return true;
                 }
+            }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                CookieSyncManager.getInstance().sync();
             }
             return false;
         } catch (MalformedURLException e) {
@@ -189,10 +207,30 @@ public class WebkitCookieManager extends java.net.CookieManager {
                 }
                 webkitCookieManager.setCookie(url, data[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=" + storeUrl.getHost() + "; path=" + storeUrl.getPath() + "; ");
             }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                CookieSyncManager.getInstance().sync();
+            }
             return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void debugShowCookies(String url) {
+        try {
+            URL storeUrl = new URL(url);
+            String cookies = webkitCookieManager.getCookie(url);
+            if (cookies == null) {
+                throw new Exception("No cookie to show.");
+            }
+            String[] cookie = cookies.trim().split("; ");
+            Log.d("WebkitCookieManager", "Cookie of " + url + " listed below.");
+            for (String aCookie : cookie) {
+                Log.d("WebkitCookieManager", aCookie);
+            }
+        } catch (Exception e) {
+            Log.d("WebkitCookieManager", e.getMessage());
         }
     }
 

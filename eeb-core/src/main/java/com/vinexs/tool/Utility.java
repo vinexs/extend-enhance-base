@@ -57,6 +57,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -284,6 +285,10 @@ public class Utility {
 
     public static boolean hasPermission(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean hasPermission(Context context, String[] permission) {
+        return hasPermission(context, new ArrayList<>(Arrays.asList(permission)));
     }
 
     public static boolean hasPermission(Context context, ArrayList<String> permissionsRequired) {

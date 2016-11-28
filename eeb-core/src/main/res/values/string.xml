@@ -22,6 +22,7 @@
 
 <resources>
 
+    <string name="app_name">app_name</string>
     <string name="app_close">Do you want to leave app_name?</string>
     <string name="app_close_back">Press BACK again to close app_name</string>
     <string name="app_not_found">Application not found.</string>

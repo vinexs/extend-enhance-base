@@ -30,8 +30,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.0.6d"
+        versionCode 3
+        versionName "1.0.7"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -72,11 +72,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Google Library
-    compile 'com.android.support:support-v4:25.0.0'
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
-    compile 'com.android.support:preference-v7:25.0.0'
-    compile 'com.android.support:preference-v14:25.0.0'
+    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:preference-v7:25.0.1'
+    compile 'com.android.support:preference-v14:25.0.1'
 
     // Iconics Library
     // https://github.com/mikepenz/Android-Iconics

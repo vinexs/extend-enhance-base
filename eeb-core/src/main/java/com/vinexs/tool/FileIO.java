@@ -404,6 +404,19 @@ public class FileIO {
         }
     }
 
+    public static void deleteFile(File file) {
+        if (file != null) {
+            if (file.isDirectory()) {
+                String[] children = file.list();
+                for (String child : children) {
+                    deleteFile(new File(file, child));
+                }
+            } else {
+                file.delete();
+            }
+        }
+    }
+
     public static void debugShowFolderContent(File folder) {
         debugShowFolderContent(folder, 0);
     }

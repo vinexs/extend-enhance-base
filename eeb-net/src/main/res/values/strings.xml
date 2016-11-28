@@ -20,4 +20,6 @@
   ~ THE SOFTWARE.
   -->
 
-<resources></resources>
+<resources>
+    <string name="open_external">Open in External Browser</string>
+</resources>

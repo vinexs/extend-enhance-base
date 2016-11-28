@@ -27,7 +27,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.util.Log;
-//import android.webkit.WebResourceError;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -36,6 +35,8 @@ import android.webkit.WebViewClient;
 
 import java.io.InputStream;
 import java.net.URL;
+
+//import android.webkit.WebResourceError;
 
 @SuppressWarnings("unused")
 public abstract class BaseWebViewClient extends WebViewClient {
@@ -145,7 +146,7 @@ public abstract class BaseWebViewClient extends WebViewClient {
             Log.d("BasicWebViewClient", "Find " + path + " from asset.");
             InputStream localStream = assetMgr.open(path);
             Log.d("BasicWebViewClient", url + " found, try load from asset.");
-            return new WebResourceResponse((url.contains(".js") ? "text/javascript" : "text/css"), "UTF-8", localStream);
+            return new WebResourceResponse((path.endsWith(".js") ? "text/javascript" : "text/css"), "UTF-8", localStream);
         } catch (Exception e) {
             return null;
         }

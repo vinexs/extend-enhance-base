@@ -30,7 +30,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,9 +37,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.vinexs.eeb.BaseFragment;
+import com.vinexs.eeb.camera.R;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -48,22 +50,25 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @SuppressWarnings({"unused", "deprecation"})
-public class BaseFragCamera extends BaseFragment {
+public abstract class BaseFragCamera extends BaseFragment implements
+        SurfaceHolder.Callback, Camera.PreviewCallback, Camera.PictureCallback {
+
+    public static final String argsFacing = "camera_facing";
 
     protected BaseFragCamera.Callback cameraCallback = null;
 
     public interface Callback {
-        void onPreviewFrame(byte[] bytes, Camera camera);
 
-        void onPictureTaken(byte[] data, Camera camera);
+        void onPreviewFrame(final byte[] bytes, Camera camera, final int previewWidth, final int previewHeight);
 
-        void onShutter();
+        void onPictureTaken(final byte[] data, Camera camera, final int pictureWidth, final int pictureHeight);
     }
 
     /* Views */
-    private SurfaceView surfaceView = null;
+    public SurfaceView surfaceView = null;
 
     /* Environment */
+    private int cameraType = 0;
     private int bestPictureWidth = 240;
     private int bestPictureHeight = 320;
     private int bestPreviewWidth = 0;
@@ -74,7 +79,7 @@ public class BaseFragCamera extends BaseFragment {
     private boolean isPreviewing;
     private boolean isCameraSwitching;
     private int totalCamera = 0;
-    private int cameraCurrentFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
+    protected int cameraCurrentFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 
     /* Motion Sensor Component */
     private SensorManager sensorManager;
@@ -87,18 +92,23 @@ public class BaseFragCamera extends BaseFragment {
     /* Timer for auto focusing*/
     private static Timer timer = null;
 
-    final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
-
-        @Override
-        public void onAutoFocus(boolean success, Camera camera) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            cameraCallback = (BaseFragCamera.Callback) context;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         }
-    };
+    }
 
     final SensorEventListener accelerometerListener = new SensorEventListener() {
 
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            if (Math.abs(sensorEvent.values[0] - lastMotionX) > 1 || Math.abs(sensorEvent.values[1] - lastMotionY) > 1 || Math.abs(sensorEvent.values[2] - lastMotionZ) > 1) {
+            if (Math.abs(sensorEvent.values[0] - lastMotionX) > 1 ||
+                    Math.abs(sensorEvent.values[1] - lastMotionY) > 1 ||
+                    Math.abs(sensorEvent.values[2] - lastMotionZ) > 1) {
                 requestCameraFocus();
                 lastMotionX = sensorEvent.values[0];
                 lastMotionY = sensorEvent.values[1];
@@ -112,49 +122,80 @@ public class BaseFragCamera extends BaseFragment {
     };
 
     @Override
-    public int getLayoutResId() {
-        return 0;
-    }
-
-    @Override
-    public int getToolbarResId() {
-        return 0;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            cameraCallback = (BaseFragCamera.Callback) context;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         totalCamera = Camera.getNumberOfCameras();
         if (totalCamera == 0) {
+            Log.e(getTag(), "No camera was found on this device.");
             getActivity().finishActivity(Activity.RESULT_CANCELED);
+        }
+        Log.d(getTag(), totalCamera + " camera was found on this device.");
+
+        if (args != null && args.containsKey(argsFacing)) {
+            cameraCurrentFacing = args.getInt(argsFacing);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout layout = new RelativeLayout(getActivity());
-        RelativeLayout.LayoutParams rpl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        layout.setLayoutParams(rpl);
-        surfaceView = new SurfaceView(getActivity());
-        surfaceView.setLayoutParams(rpl);
-        layout.addView(surfaceView);
-        return layout;
+        int layoutResId = getLayoutResId();
+        if (layoutResId == 0) {
+            Log.e(getTag(), "Undefined layout in fragment.");
+            getActivity().finish();
+            return null;
+        }
+        return inflater.inflate(layoutResId, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        int surfaceViewResId = getSurfaceResId();
+        if (surfaceViewResId != 0) {
+            surfaceView = (SurfaceView) view.findViewById(surfaceViewResId);
+        }
+
+        // Is scanner mode.
+        int scannerBarResId = getScannerBarResId();
+        if (scannerBarResId != 0) {
+            ImageView scanEffect = (ImageView) view.findViewById(scannerBarResId);
+            Animation scanEffectAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.lib_camera_scan_effect);
+            scanEffect.startAnimation(scanEffectAnimation);
+        }
+
+        // Can switch camera
+        int switchButtonResId = getSwitchCameraButtonResId();
+        if (switchButtonResId != 0 && totalCamera >= 2) {
+            View switchButton = view.findViewById(switchButtonResId);
+            switchButton.setVisibility(View.VISIBLE);
+            switchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switchCamera();
+                }
+            });
+        }
+
+        // Can take picture
+        int shutterButtonResId = getShutterButtonResId();
+        if (shutterButtonResId != 0) {
+            View shutterButton = view.findViewById(shutterButtonResId);
+            shutterButton.setVisibility(View.VISIBLE);
+            shutterButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    takePicture();
+                }
+            });
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        resumeCamera(cameraCurrentFacing);
+        resumeCamera();
         resumeMotionSensor();
     }
 
@@ -166,88 +207,60 @@ public class BaseFragCamera extends BaseFragment {
     }
 
     /* Camera Component  */
-    public void resumeCamera(int cameraFacing) {
-        camera = Camera.open(cameraFacing);
-        Log.d(getTag(), "Camera open at " + cameraFacing + ".");
+    public void resumeCamera() {
+        Log.d(getTag(), "Camera open at " + cameraCurrentFacing + ".");
+
+        camera = Camera.open(cameraCurrentFacing);
         measureBestScreenEnvironment();
-        projectImageToSurface();
+
         surfaceView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestCameraFocus();
             }
         });
+        SurfaceHolder holder = surfaceView.getHolder();
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        holder.addCallback(this);
     }
 
     public void pauseCamera() {
         if (camera != null) {
-            camera.stopPreview();
-            //Delay for preview stop process.
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    camera.release();
-                    camera = null;
-                    Log.d(getTag(), "Camera is released and close now.");
-                }
-            }, 500);
+            camera.setPreviewCallback(null);
+            camera.release();
+            camera = null;
+
+            System.gc();
+
+            surfaceView.setOnClickListener(null);
+            surfaceView.getHolder().removeCallback(this);
+            Log.d(getTag(), "Camera is released and close now.");
         }
     }
 
-    public void projectImageToSurface() {
-        try {
-            SurfaceHolder surfaceHolder = surfaceView.getHolder();
-            surfaceHolder.addCallback(new SurfaceHolder.Callback() {
+    public void switchCamera() {
+        if (totalCamera >= 2 && !isCameraSwitching) {
+            Log.d(getTag(), "Request switching camera...");
+            isCameraSwitching = true;
 
-                @Override
-                public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                    Camera.Parameters camParam = camera.getParameters();
-                    setDisplayOrientation(camera, 90);
-                    camParam.setPictureSize(bestPictureWidth, bestPictureHeight);
-                    camParam.setPreviewSize(bestPreviewWidth, bestPreviewHeight);
-                    camParam.setJpegQuality(100);
-                    camera.setParameters(camParam);
-                }
+            pauseCamera();
 
-                @Override
-                public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
-                    if (isPreviewing) {
-                        camera.stopPreview();
-                    }
-                    try {
-                        camera.setPreviewDisplay(surfaceHolder);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    camera.startPreview();
-                    isPreviewing = true;
-                }
+            ViewGroup.LayoutParams surfaceParam = surfaceView.getLayoutParams();
+            SurfaceView newSurfaceView = new SurfaceView(getActivity());
+            newSurfaceView.setLayoutParams(surfaceParam);
+            newSurfaceView.setId(getSurfaceResId());
 
-                @Override
-                public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                    isPreviewing = false;
-                }
+            ViewGroup surfaceViewParent = (ViewGroup) surfaceView.getParent();
 
-                protected void setDisplayOrientation(Camera camera, int angle) {
-                    try {
-                        Method downPolymorphic = camera.getClass().getMethod("setDisplayOrientation", int.class);
-                        if (downPolymorphic != null) {
-                            downPolymorphic.invoke(camera, angle);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            camera.setPreviewCallback(new Camera.PreviewCallback() {
-                @Override
-                public void onPreviewFrame(byte[] bytes, Camera camera) {
-                    onPreviewFrameReceived(bytes, camera);
-                }
-            });
+            surfaceViewParent.removeView(surfaceView);
+            surfaceViewParent.addView(newSurfaceView);
+            surfaceView = newSurfaceView;
 
-        } catch (Exception e) {
-            Log.d(getTag(), "Exception occurred in opening camera", e);
+            cameraCurrentFacing = (cameraCurrentFacing == Camera.CameraInfo.CAMERA_FACING_BACK) ?
+                    Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
+
+            isCameraSwitching = false;
+            resumeCamera();
         }
     }
 
@@ -314,69 +327,22 @@ public class BaseFragCamera extends BaseFragment {
         Log.d(getTag(), "Decide Picture Size as Higher :" + bestPictureWidth + " x " + bestPictureHeight);
     }
 
-    public void requestCameraFocus() {
-        if (camera == null) {
-            return;
-        }
-        try {
-            camera.autoFocus(autoFocusCallback);
-            Log.d(getTag(), "Focusing...");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        setFocusingTimer();
-    }
-
-    public void switchCamera() {
-        if (totalCamera >= 2 && !isCameraSwitching) {
-            isCameraSwitching = true;
-            final int fSwitchCameraTo = (cameraCurrentFacing == Camera.CameraInfo.CAMERA_FACING_BACK) ?
-                    Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
-            pauseCamera();
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    resumeCamera(fSwitchCameraTo);
-                    cameraCurrentFacing = fSwitchCameraTo;
-                    isCameraSwitching = false;
-                }
-            }, 750);
-        }
-    }
-
     public void takePicture() {
         if (camera == null) {
             return;
         }
+        // After checking write permission, it finally can run.
         camera.takePicture(new Camera.ShutterCallback() {
 
             @Override
             public void onShutter() {
                 onShutterAction();
             }
-        }, null, new Camera.PictureCallback() {
-
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                onPictureFrameReceived(data, camera);
-            }
-        });
+        }, null, this);
     }
 
-    public void onPreviewFrameReceived(byte[] data, Camera camera) {
-        cameraCallback.onPreviewFrame(data, camera);
-    }
+    // region Motion Sensor Component ==============================================================
 
-    public void onPictureFrameReceived(byte[] data, Camera camera) {
-        cameraCallback.onPictureTaken(data, camera);
-    }
-
-    public void onShutterAction() {
-        cameraCallback.onShutter();
-    }
-
-    /* Motion Sensor Component */
     public void resumeMotionSensor() {
         if (sensorManager == null) {
             sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -395,7 +361,10 @@ public class BaseFragCamera extends BaseFragment {
         }
     }
 
-    /* Timer for auto focusing */
+    // endregion Motion Sensor Component ===========================================================
+
+    // region Focusing Event =======================================================================
+
     public void setFocusingTimer() {
         if (timer != null) {
             timer.cancel();
@@ -413,4 +382,102 @@ public class BaseFragCamera extends BaseFragment {
         }
     }
 
+    public void requestCameraFocus() {
+        if (camera == null) {
+            return;
+        }
+        try {
+            camera.autoFocus(new Camera.AutoFocusCallback() {
+
+                @Override
+                public void onAutoFocus(boolean success, Camera camera) {
+                }
+            });
+            Log.d(getTag(), "Focusing...");
+        } catch (Exception ignored) {
+        }
+        setFocusingTimer();
+    }
+
+    // endregion Focusing Event ====================================================================
+
+    // region Camera Callback ======================================================================
+    @Override
+    public void onPictureTaken(byte[] bytes, Camera camera) {
+        cameraCallback.onPictureTaken(bytes, camera, bestPictureWidth, bestPictureHeight);
+    }
+
+    @Override
+    public void onPreviewFrame(byte[] bytes, Camera camera) {
+        cameraCallback.onPreviewFrame(bytes, camera, bestPreviewWidth, bestPreviewHeight);
+    }
+
+    // endregion Camera Callback ===================================================================
+
+    // region Surface Holder Callback ==============================================================
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        Log.d("Camera", "surfaceCreated");
+
+        Camera.Parameters camParam = camera.getParameters();
+        setDisplayOrientation(camera, 90);
+        camParam.setPictureSize(bestPictureWidth, bestPictureHeight);
+        camParam.setPreviewSize(bestPreviewWidth, bestPreviewHeight);
+        camParam.setJpegQuality(100);
+        camera.setParameters(camParam);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
+        if (isPreviewing) {
+            camera.stopPreview();
+        }
+        try {
+            camera.setPreviewDisplay(surfaceHolder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        camera.setPreviewCallback(this);
+        camera.startPreview();
+        isPreviewing = true;
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        isPreviewing = false;
+    }
+
+    void setDisplayOrientation(Camera camera, int angle) {
+        try {
+            Method downPolymorphic = camera.getClass().getMethod("setDisplayOrientation", int.class);
+            if (downPolymorphic != null) {
+                downPolymorphic.invoke(camera, angle);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // endregion Surface Holder Callback ===========================================================
+
+    // region Abstract Methods =====================================================================
+
+    @Override
+    public abstract int getLayoutResId();
+
+    @Override
+    public abstract int getToolbarResId();
+
+    public abstract int getSurfaceResId();
+
+    public abstract int getScannerBarResId();
+
+    public abstract int getSwitchCameraButtonResId();
+
+    public abstract int getShutterButtonResId();
+
+    public abstract void onShutterAction();
+
+    // endregion Abstract Methods ==================================================================
 }

@@ -26,7 +26,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.LinearLayout;
@@ -54,7 +53,6 @@ public class ScalableLinearLayout extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Let the ScaleGestureDetector inspect all events.
-        Log.d("ScaleLinearLayout", "MotionEvent: " + event.toString());
         scaleDetector.onTouchEvent(event);
         return true;
     }

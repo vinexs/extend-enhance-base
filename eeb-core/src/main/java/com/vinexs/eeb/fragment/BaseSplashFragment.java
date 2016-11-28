@@ -33,7 +33,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.vinexs.R;
-import com.vinexs.eeb.BaseFragment;
 
 import java.util.Calendar;
 
@@ -45,7 +44,7 @@ import java.util.Calendar;
  * @author Vin Wong
  */
 @SuppressWarnings("unused")
-public abstract class BaseSplashFragment extends BaseFragment {
+public abstract class BaseSplashFragment extends BaseLayFragment {
 
     protected long timeStart = 0;
     protected TextView txtVersion;
