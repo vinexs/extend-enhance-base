@@ -45,10 +45,252 @@
 
     <style name="BaseTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Preference_TextAppearanceMaterialBody2">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    <!-- Material Color Theme (Extends) -->
+    <!-- ================================ -->
+
+    <!-- RoseRed  -->
+    <style name="Compat.BaseTheme.RoseRed" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.RoseRed" parent="Compat.BaseTheme.RoseRed">
+        <item name="colorPrimary">#FFF44336</item>
+        <item name="colorPrimaryDark">#FFD32F2F</item>
+        <item name="colorAccent">#FFFFE082</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Pink  -->
+    <style name="Compat.BaseTheme.Pink" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Pink" parent="Compat.BaseTheme.Pink">
+        <item name="colorPrimary">#FFE91E63</item>
+        <item name="colorPrimaryDark">#FFC2185B</item>
+        <item name="colorAccent">#FF4DD0E1</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Purple  -->
+    <style name="Compat.BaseTheme.Purple" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Purple" parent="Compat.BaseTheme.Purple">
+        <item name="colorPrimary">#FF9C27B0</item>
+        <item name="colorPrimaryDark">#FF7B1FA2</item>
+        <item name="colorAccent">#FFFFFFFF</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- DeepPurple  -->
+    <style name="Compat.BaseTheme.DeepPurple" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.DeepPurple" parent="Compat.BaseTheme.DeepPurple">
+        <item name="colorPrimary">#FF673AB7</item>
+        <item name="colorPrimaryDark">#FF512DA8</item>
+        <item name="colorAccent">#FFEFEFEF</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Indigo  -->
+    <style name="Compat.BaseTheme.Indigo" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Indigo" parent="Compat.BaseTheme.Indigo">
+        <item name="colorPrimary">#FF3F51B5</item>
+        <item name="colorPrimaryDark">#FF303F9F</item>
+        <item name="colorAccent">#FFFF4081</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Blue  -->
+    <style name="Compat.BaseTheme.Blue" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Blue" parent="Compat.BaseTheme.Blue">
+        <item name="colorPrimary">#FF2196F3</item>
+        <item name="colorPrimaryDark">#FF1976D2</item>
+        <item name="colorAccent">#FFE91E63</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- LightBlue  -->
+    <style name="Compat.BaseTheme.LightBlue" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.LightBlue" parent="Compat.BaseTheme.LightBlue">
+        <item name="colorPrimary">#FF03A9F4</item>
+        <item name="colorPrimaryDark">#FF0288D1</item>
+        <item name="colorAccent">#FFE91E63</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Cyan  -->
+    <style name="Compat.BaseTheme.Cyan" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Cyan" parent="Compat.BaseTheme.Cyan">
+        <item name="colorPrimary">#FF00BCD4</item>
+        <item name="colorPrimaryDark">#FF0097A7</item>
+        <item name="colorAccent">#FFFFEE58</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Teal  -->
+    <style name="Compat.BaseTheme.Teal" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Teal" parent="Compat.BaseTheme.Teal">
+        <item name="colorPrimary">#FF009688</item>
+        <item name="colorPrimaryDark">#FF00796B</item>
+        <item name="colorAccent">#FF721418</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Green  -->
+    <style name="Compat.BaseTheme.Green" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Green" parent="Compat.BaseTheme.Green">
+        <item name="colorPrimary">#FF259B24</item>
+        <item name="colorPrimaryDark">#FF388E3C</item>
+        <item name="colorAccent">#FFAAAAAA</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- LightGreen  -->
+    <style name="Compat.BaseTheme.LightGreen" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.LightGreen" parent="Compat.BaseTheme.LightGreen">
+        <item name="colorPrimary">#FF8BC34A</item>
+        <item name="colorPrimaryDark">#FF689F38</item>
+        <item name="colorAccent">#FFAB47BC</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Lime  -->
+    <style name="Compat.BaseTheme.Lime" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Lime" parent="Compat.BaseTheme.Lime">
+        <item name="colorPrimary">#FFCDDC39</item>
+        <item name="colorPrimaryDark">#FFAFB42B</item>
+        <item name="colorAccent">#FF80DEEA</item>
+        <item name="drawerArrowStyle">@style/DarkDrawerIconStyle</item>
+    </style>
+
+    <!-- Yellow  -->
+    <style name="Compat.BaseTheme.Yellow" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Yellow" parent="Compat.BaseTheme.Yellow">
+        <item name="colorPrimary">#FFFFEB3B</item>
+        <item name="colorPrimaryDark">#FFFBC02D</item>
+        <item name="colorAccent">#FF4FC3F7</item>
+        <item name="drawerArrowStyle">@style/DarkDrawerIconStyle</item>
+    </style>
+
+    <!-- Amber  -->
+    <style name="Compat.BaseTheme.Amber" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Amber" parent="Compat.BaseTheme.Amber">
+        <item name="colorPrimary">#FFFFC107</item>
+        <item name="colorPrimaryDark">#FFFFA000</item>
+        <item name="colorAccent">#FF546E7A</item>
+        <item name="drawerArrowStyle">@style/DarkDrawerIconStyle</item>
+    </style>
+
+    <!-- Orange  -->
+    <style name="Compat.BaseTheme.Orange" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Orange" parent="Compat.BaseTheme.Orange">
+        <item name="colorPrimary">#FFFF9800</item>
+        <item name="colorPrimaryDark">#FFF57C00</item>
+        <item name="colorAccent">#FF607D8B</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- DeepOrange  -->
+    <style name="Compat.BaseTheme.DeepOrange" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.DeepOrange" parent="Compat.BaseTheme.DeepOrange">
+        <item name="colorPrimary">#FFFF5722</item>
+        <item name="colorPrimaryDark">#FFE64A19</item>
+        <item name="colorAccent">#FF607D8B</item>
+        <item name="drawerArrowStyle">@style/AccentDrawerIconStyle</item>
+    </style>
+
+    <!-- Brown  -->
+    <style name="Compat.BaseTheme.Brown" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Brown" parent="Compat.BaseTheme.Brown">
+        <item name="colorPrimary">#FF795548</item>
+        <item name="colorPrimaryDark">#FF5D4037</item>
+        <item name="colorAccent">#FF80DEEA</item>
+        <item name="drawerArrowStyle">@style/AccentDrawerIconStyle</item>
+    </style>
+
+    <!-- Grey  -->
+    <style name="Compat.BaseTheme.Grey" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Grey" parent="Compat.BaseTheme.Grey">
+        <item name="colorPrimary">#FF9E9E9E</item>
+        <item name="colorPrimaryDark">#FF616161</item>
+        <item name="colorAccent">#FFFFCA28</item>
+        <item name="drawerArrowStyle">@style/DarkDrawerIconStyle</item>
+    </style>
+
+    <!-- BlueGrey  -->
+    <style name="Compat.BaseTheme.BlueGrey" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.BlueGrey" parent="Compat.BaseTheme.BlueGrey">
+        <item name="colorPrimary">#FF607D8B</item>
+        <item name="colorPrimaryDark">#FF455A64</item>
+        <item name="colorAccent">#FF4FC3F7</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- Black  -->
+    <style name="Compat.BaseTheme.Black" parent="BaseTheme.NoActionBar" />
+
+    <style name="BaseTheme.Black" parent="Compat.BaseTheme.Black">
+        <item name="colorPrimary">#FF212121</item>
+        <item name="colorPrimaryDark">#FF000000</item>
+        <item name="colorAccent">#FFEC407A</item>
+        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
+
+    <!-- ActionBar (ToolBar) -->
+    <!-- ================================ -->
+    <style name="BaseTheme.DarkActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="titleTextAppearance">@style/BaseTheme.WhiteTitleTextStyle</item>
+    </style>
+
+    <style name="BaseTheme.LightActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="titleTextAppearance">@style/BaseTheme.DarkTitleTextStyle</item>
+    </style>
+
+    <style name="BaseTheme.AccentActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="titleTextAppearance">@style/BaseTheme.AccentTitleTextStyle</item>
+    </style>
+
+    <!-- Title Text -->
+    <!-- ================================ -->
+    <style name="BaseTheme.WhiteTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BaseTheme.DarkTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="BaseTheme.AccentTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <!-- Drawer Arrow -->
+    <!-- ================================ -->
+    <style name="WhiteDrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">#ffffff</item>
+    </style>
+
+    <style name="DarkDrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">#000000</item>
+    </style>
+
+    <style name="AccentDrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">?attr/colorAccent</item>
     </style>
 
     <!-- Material Color Button (Base) -->
@@ -64,197 +306,12 @@
         <item name="android:radius">1dp</item>
     </style>
 
-
     <!-- Material Color Button (Extends) -->
     <!-- ================================ -->
 
     <style name="PrimaryButton" parent="BaseButton">
         <item name="android:background">@drawable/primary_color_background</item>
         <item name="android:textColor">?android:attr/actionMenuTextColor</item>
-    </style>
-
-
-    <!-- Material Color Theme (Extends) -->
-    <!-- ================================ -->
-
-    <!-- RoseRed  -->
-    <style name="Compat.BaseTheme.RoseRed" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.RoseRed" parent="Compat.BaseTheme.RoseRed">
-        <item name="colorPrimary">#FFF44336</item>
-        <item name="colorPrimaryDark">#FFD32F2F</item>
-        <item name="colorAccent">#FFFFE082</item>
-    </style>
-
-    <!-- Pink  -->
-    <style name="Compat.BaseTheme.Pink" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Pink" parent="Compat.BaseTheme.Pink">
-        <item name="colorPrimary">#FFE91E63</item>
-        <item name="colorPrimaryDark">#FFC2185B</item>
-        <item name="colorAccent">#FF4DD0E1</item>
-    </style>
-
-    <!-- Purple  -->
-    <style name="Compat.BaseTheme.Purple" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Purple" parent="Compat.BaseTheme.Purple">
-        <item name="colorPrimary">#FF9C27B0</item>
-        <item name="colorPrimaryDark">#FF7B1FA2</item>
-        <item name="colorAccent">#FFFFFFFF</item>
-    </style>
-
-    <!-- DeepPurple  -->
-    <style name="Compat.BaseTheme.DeepPurple" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.DeepPurple" parent="Compat.BaseTheme.DeepPurple">
-        <item name="colorPrimary">#FF673AB7</item>
-        <item name="colorPrimaryDark">#FF512DA8</item>
-        <item name="colorAccent">#FFEFEFEF</item>
-    </style>
-
-    <!-- Indigo  -->
-    <style name="Compat.BaseTheme.Indigo" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Indigo" parent="Compat.BaseTheme.Indigo">
-        <item name="colorPrimary">#FF3F51B5</item>
-        <item name="colorPrimaryDark">#FF303F9F</item>
-        <item name="colorAccent">#FFFF4081</item>
-    </style>
-
-    <!-- Blue  -->
-    <style name="Compat.BaseTheme.Blue" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Blue" parent="Compat.BaseTheme.Blue">
-        <item name="colorPrimary">#FF2196F3</item>
-        <item name="colorPrimaryDark">#FF1976D2</item>
-        <item name="colorAccent">#FFE91E63</item>
-    </style>
-
-    <!-- LightBlue  -->
-    <style name="Compat.BaseTheme.LightBlue" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.LightBlue" parent="Compat.BaseTheme.LightBlue">
-        <item name="colorPrimary">#FF03A9F4</item>
-        <item name="colorPrimaryDark">#FF0288D1</item>
-        <item name="colorAccent">#FFE91E63</item>
-    </style>
-
-    <!-- Cyan  -->
-    <style name="Compat.BaseTheme.Cyan" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Cyan" parent="Compat.BaseTheme.Cyan">
-        <item name="colorPrimary">#FF00BCD4</item>
-        <item name="colorPrimaryDark">#FF0097A7</item>
-        <item name="colorAccent">#FFFFEE58</item>
-    </style>
-
-    <!-- Teal  -->
-    <style name="Compat.BaseTheme.Teal" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Teal" parent="Compat.BaseTheme.Teal">
-        <item name="colorPrimary">#FF009688</item>
-        <item name="colorPrimaryDark">#FF00796B</item>
-        <item name="colorAccent">#FF721418</item>
-    </style>
-
-    <!-- Green  -->
-    <style name="Compat.BaseTheme.Green" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Green" parent="Compat.BaseTheme.Green">
-        <item name="colorPrimary">#FF259B24</item>
-        <item name="colorPrimaryDark">#FF388E3C</item>
-        <item name="colorAccent">#FFAAAAAA</item>
-    </style>
-
-    <!-- LightGreen  -->
-    <style name="Compat.BaseTheme.LightGreen" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.LightGreen" parent="Compat.BaseTheme.LightGreen">
-        <item name="colorPrimary">#FF8BC34A</item>
-        <item name="colorPrimaryDark">#FF689F38</item>
-        <item name="colorAccent">#FFAB47BC</item>
-    </style>
-
-    <!-- Lime  -->
-    <style name="Compat.BaseTheme.Lime" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Lime" parent="Compat.BaseTheme.Lime">
-        <item name="colorPrimary">#FFCDDC39</item>
-        <item name="colorPrimaryDark">#FFAFB42B</item>
-        <item name="colorAccent">#FF80DEEA</item>
-    </style>
-
-    <!-- Yellow  -->
-    <style name="Compat.BaseTheme.Yellow" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Yellow" parent="Compat.BaseTheme.Yellow">
-        <item name="colorPrimary">#FFFFEB3B</item>
-        <item name="colorPrimaryDark">#FFFBC02D</item>
-        <item name="colorAccent">#FF4FC3F7</item>
-    </style>
-
-    <!-- Amber  -->
-    <style name="Compat.BaseTheme.Amber" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Amber" parent="Compat.BaseTheme.Amber">
-        <item name="colorPrimary">#FFFFC107</item>
-        <item name="colorPrimaryDark">#FFFFA000</item>
-        <item name="colorAccent">#FF546E7A</item>
-    </style>
-
-    <!-- Orange  -->
-    <style name="Compat.BaseTheme.Orange" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Orange" parent="Compat.BaseTheme.Orange">
-        <item name="colorPrimary">#FFFF9800</item>
-        <item name="colorPrimaryDark">#FFF57C00</item>
-        <item name="colorAccent">#FF607D8B</item>
-    </style>
-
-    <!-- DeepOrange  -->
-    <style name="Compat.BaseTheme.DeepOrange" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.DeepOrange" parent="Compat.BaseTheme.DeepOrange">
-        <item name="colorPrimary">#FFFF5722</item>
-        <item name="colorPrimaryDark">#FFE64A19</item>
-        <item name="colorAccent">#FF607D8B</item>
-    </style>
-
-    <!-- Brown  -->
-    <style name="Compat.BaseTheme.Brown" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Brown" parent="Compat.BaseTheme.Brown">
-        <item name="colorPrimary">#FF795548</item>
-        <item name="colorPrimaryDark">#FF5D4037</item>
-        <item name="colorAccent">#FF80DEEA</item>
-    </style>
-
-    <!-- Grey  -->
-    <style name="Compat.BaseTheme.Grey" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Grey" parent="Compat.BaseTheme.Grey">
-        <item name="colorPrimary">#FF9E9E9E</item>
-        <item name="colorPrimaryDark">#FF616161</item>
-        <item name="colorAccent">#FFFFCA28</item>
-    </style>
-
-    <!-- BlueGrey  -->
-    <style name="Compat.BaseTheme.BlueGrey" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.BlueGrey" parent="Compat.BaseTheme.BlueGrey">
-        <item name="colorPrimary">#FF607D8B</item>
-        <item name="colorPrimaryDark">#FF455A64</item>
-        <item name="colorAccent">#FF4FC3F7</item>
-    </style>
-
-    <!-- Black  -->
-    <style name="Compat.BaseTheme.Black" parent="BaseTheme.NoActionBar" />
-
-    <style name="BaseTheme.Black" parent="Compat.BaseTheme.Black">
-        <item name="colorPrimary">#FF212121</item>
-        <item name="colorPrimaryDark">#FF000000</item>
-        <item name="colorAccent">#FFEC407A</item>
     </style>
 
     <!-- Dialog Style -->

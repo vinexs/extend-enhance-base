@@ -22,9 +22,7 @@
 
 package com.vinexs.eeb.receiver;
 
-import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -42,26 +40,28 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.vinexs.eeb.net.R;
 import com.vinexs.tool.Utility;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Random;
 
+// import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 @SuppressWarnings("unused")
+@Deprecated
 public abstract class BaseReceiverGCM extends BroadcastReceiver {
 
     protected NotificationManagerCompat notifyMgr;
     protected NotificationCompat.Builder builder;
-    protected GoogleCloudMessaging gcm = null;
+    //    protected GoogleCloudMessaging gcm = null;
     protected Context context;
     protected CharSequence contentTitle = "";
     protected CharSequence contentText = "";
     protected int messageNum = 0;
 
+    /*
     public void requestDeviceRegisterId(Activity activity, final String gcmSenderId) {
         ArrayList<String> permissionList = new ArrayList<>();
         permissionList.add(Manifest.permission.INTERNET);
@@ -112,6 +112,7 @@ public abstract class BaseReceiverGCM extends BroadcastReceiver {
                 break;
         }
     }
+    */
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     public void onMessageTypeReceive(Context context, Intent intent) {

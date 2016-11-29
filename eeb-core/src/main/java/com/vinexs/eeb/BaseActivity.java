@@ -230,8 +230,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         switch (closeAction) {
             case CLOSE_DIALOG:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(getResources().getString(R.string.app_close)
-                        .replace("app_name", Utility.getAppName(this)));
+                builder.setMessage(getResources().getString(R.string.app_close, Utility.getAppName(this)));
                 builder.setPositiveButton(R.string.confirm, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -251,8 +250,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             case CLOSE_TOAST:
                 if (!pressBackToClose) {
                     pressBackToClose = true;
-                    Toast.makeText(this, getResources().getString(R.string.app_close)
-                            .replace("app_name", Utility.getAppName(this)), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.app_close_back,
+                            Utility.getAppName(this)), Toast.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

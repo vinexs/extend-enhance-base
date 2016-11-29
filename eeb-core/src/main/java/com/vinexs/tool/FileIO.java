@@ -47,14 +47,14 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class FileIO {
 
     public static String getPathFromUri(Context context, Uri uri) {
         String uploadFileLocation = "";
         try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            String[] projection = {MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
             if (cursor == null) {
                 throw new Exception("Uri cursor return null.");
             }
@@ -412,6 +412,7 @@ public class FileIO {
                     deleteFile(new File(file, child));
                 }
             } else {
+                //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
         }

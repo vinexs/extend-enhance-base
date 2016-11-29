@@ -55,7 +55,4 @@ android {
 
 dependencies {
     compile project(':eeb-core')
-
-    // Google Play Services GCM
-    compile 'com.google.android.gms:play-services-gcm:9.8.0'
 }
