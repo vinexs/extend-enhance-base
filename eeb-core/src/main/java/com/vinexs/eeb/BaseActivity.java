@@ -214,6 +214,93 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Require setDefaultBackStackListener() ran in onCreate
+     */
+    protected void BackStackSyncStatus() {
+        try {
+            FragmentManager fragMgr = getSupportFragmentManager();
+            int count = fragMgr.getBackStackEntryCount();
+            if (count - 1 >= 0) {
+                BackStackEntry entry = fragMgr.getBackStackEntryAt(count - 1);
+                String title = (String) entry.getBreadCrumbTitle();
+                if (getSupportActionBar() != null) {
+                    setBackStackTitle(title);
+                    getSupportActionBar().setHomeButtonEnabled(true);
+                    if (!hasLeftDrawer && !hasRightDrawer) {
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    }
+                }
+                if (drawerLayout != null) {
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
+                }
+                if (drawerToggle != null) {
+                    drawerToggle.setDrawerIndicatorEnabled(false);
+                }
+                onBaseBackStackChanged(false, count);
+            } else {
+                if (getSupportActionBar() != null) {
+                    setBackStackTitle(Utility.getAppName(this));
+                    getSupportActionBar().setHomeButtonEnabled(false);
+                    if (!hasLeftDrawer && !hasRightDrawer) {
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    }
+                }
+                if (hasLeftDrawer) {
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
+                    if (drawerToggle != null) {
+                        drawerToggle.setDrawerIndicatorEnabled(true);
+                    }
+                }
+                if (hasRightDrawer) {
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
+                }
+                onBaseBackStackChanged(true, count);
+            }
+            if (drawerToggle != null) {
+                drawerToggle.syncState();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setBackStackTitle(String title) {
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar == null) {
+            return;
+        }
+        actionbar.setTitle(title);
+    }
+
+    public void setBackStackTitle(SpannableString title) {
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar == null) {
+            return;
+        }
+        actionbar.setTitle(title);
+    }
+
+    public abstract void onBaseBackStackChanged(boolean noTurnBack, int entryCount);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    onBackPressed();
+                    return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+        if (drawerToggle == null) {
+            onBackPressed();
+            return true;
+        }
+        return drawerToggle.onOptionsItemSelected(item);
+    }
+
     public void lockBackPress() {
         allowBack = false;
     }
@@ -269,93 +356,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Require setDefaultBackStackListener() ran in onCreate
-     */
-    protected void BackStackSyncStatus() {
-        try {
-            FragmentManager fragMgr = getSupportFragmentManager();
-            int count = fragMgr.getBackStackEntryCount();
-            if (count - 1 >= 0) {
-                BackStackEntry entry = fragMgr.getBackStackEntryAt(count - 1);
-                String title = (String) entry.getBreadCrumbTitle();
-                if (getSupportActionBar() != null) {
-                    setBackStackTitle(title);
-                    getSupportActionBar().setHomeButtonEnabled(true);
-                    if (!hasLeftDrawer && !hasRightDrawer) {
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    }
-                }
-                if (drawerLayout != null) {
-                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
-                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
-                }
-                if (drawerToggle != null) {
-                    drawerToggle.setDrawerIndicatorEnabled(false);
-                }
-                onBaseBackStackChanged(false, count);
-            } else {
-                if (getSupportActionBar() != null) {
-                    setBackStackTitle(Utility.getAppName(this));
-                    getSupportActionBar().setHomeButtonEnabled(false);
-                    if (!hasLeftDrawer && !hasRightDrawer) {
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    }
-                }
-                if (hasLeftDrawer) {
-                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
-                    if (drawerToggle != null) {
-                        drawerToggle.setDrawerIndicatorEnabled(true);
-                    }
-                }
-                if (hasRightDrawer) {
-                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
-                }
-                onBaseBackStackChanged(true, count);
-            }
-            if (drawerToggle != null) {
-                drawerToggle.syncState();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setBackStackTitle(String title) {
-        ActionBar actionbar = getSupportActionBar();
-        if (actionbar == null) {
-            return;
-        }
-        actionbar.setTitle(title);
-    }
-
-    public void setBackStackTitle(SpannableString title) {
-        ActionBar actionbar = getSupportActionBar();
-        if (actionbar == null) {
-            return;
-        }
-        actionbar.setTitle(title);
-    }
-
-    public abstract void onBaseBackStackChanged(boolean noTurnBack, int entryCount);
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    onBackPressed();
-                    return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-        if (drawerToggle == null) {
-            onBackPressed();
-            return true;
-        }
-        return drawerToggle.onOptionsItemSelected(item);
-    }
-
     // ================  Fragments Control =========================
 
     public void addLeftDrawer(Fragment frag) {
@@ -374,12 +374,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void addRightDrawer(Fragment frag) {
+        addRightDrawer(frag, "RIGHT_DRAWER");
+    }
+
+    public void addRightDrawer(Fragment frag, String tag) {
         if (hasRightDrawer) {
             return;
         }
         hasRightDrawer = true;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.frame_drawer_right, frag, "RIGHT_DRAWER").commitAllowingStateLoss();
+        transaction.add(R.id.frame_drawer_right, frag, tag).commitAllowingStateLoss();
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
         setDrawerToggleEnable();
     }

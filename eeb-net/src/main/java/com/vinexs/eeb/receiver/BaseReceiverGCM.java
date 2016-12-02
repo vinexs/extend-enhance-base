@@ -22,10 +22,13 @@
 
 package com.vinexs.eeb.receiver;
 
+import android.content.BroadcastReceiver;
+/*
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,32 +48,33 @@ import com.vinexs.tool.Utility;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 
-// import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+*/
 
 @SuppressWarnings("unused")
 @Deprecated
 public abstract class BaseReceiverGCM extends BroadcastReceiver {
 
+    /*
     protected NotificationManagerCompat notifyMgr;
     protected NotificationCompat.Builder builder;
-    //    protected GoogleCloudMessaging gcm = null;
+    protected GoogleCloudMessaging gcm = null;
     protected Context context;
     protected CharSequence contentTitle = "";
     protected CharSequence contentText = "";
     protected int messageNum = 0;
 
-    /*
     public void requestDeviceRegisterId(Activity activity, final String gcmSenderId) {
-        ArrayList<String> permissionList = new ArrayList<>();
-        permissionList.add(Manifest.permission.INTERNET);
-        permissionList.add(Manifest.permission.WAKE_LOCK);
-        permissionList.add(Manifest.permission.GET_ACCOUNTS);
-        permissionList.add(Manifest.permission.VIBRATE);
-        permissionList.add("com.google.android.c2dm.permission.RECEIVE");
-        permissionList.add(activity.getPackageName() + ".permission.C2D_MESSAGE");
-        if (Utility.hasPermission(activity, permissionList)) {
+        if (Utility.hasPermission(activity, new String[]{
+                Manifest.permission.INTERNET,
+                Manifest.permission.WAKE_LOCK,
+                Manifest.permission.GET_ACCOUNTS,
+                Manifest.permission.VIBRATE,
+                "com.google.android.c2dm.permission.RECEIVE",
+                activity.getPackageName() + ".permission.C2D_MESSAGE"})) {
             gcm = GoogleCloudMessaging.getInstance(activity.getApplicationContext());
             String register_id;
             try {
@@ -112,7 +116,6 @@ public abstract class BaseReceiverGCM extends BroadcastReceiver {
                 break;
         }
     }
-    */
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     public void onMessageTypeReceive(Context context, Intent intent) {
@@ -155,7 +158,7 @@ public abstract class BaseReceiverGCM extends BroadcastReceiver {
                     wearableExtender.setBackground(bigIcon);
                     builder.extend(wearableExtender);
                     // Set accent color
-                    int[] attrs = new int[] { R.attr.colorAccent };
+                    int[] attrs = new int[]{R.attr.colorAccent};
                     TypedArray ta = context.obtainStyledAttributes(attrs);
                     String colorAccent = ta.getString(0);
                     ta.recycle();
@@ -202,6 +205,7 @@ public abstract class BaseReceiverGCM extends BroadcastReceiver {
             e.printStackTrace();
         }
     }
+    */
 
     /**
      * Assign application main class for pending intent.
@@ -228,8 +232,8 @@ public abstract class BaseReceiverGCM extends BroadcastReceiver {
 
     /**
      * Google GCM server will send a registered id for receiving notification.
+     *
      * @param register_id Registered returned from GCM server.
      */
     public abstract void handleReceivedRegisterId(String register_id);
-
 }

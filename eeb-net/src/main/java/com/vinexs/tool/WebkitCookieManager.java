@@ -26,7 +26,6 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.webkit.CookieSyncManager;
-import android.webkit.WebView;
 
 import java.io.IOException;
 import java.net.CookiePolicy;
@@ -56,10 +55,6 @@ public class WebkitCookieManager extends java.net.CookieManager {
 
     public WebkitCookieManager(Context context, CookieStore store, CookiePolicy cookiePolicy) {
         super(null, cookiePolicy);
-        try {
-            WebView webView = new WebView(context);
-        } catch (Exception ignored) {
-        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             CookieSyncManager.createInstance(context);
         }

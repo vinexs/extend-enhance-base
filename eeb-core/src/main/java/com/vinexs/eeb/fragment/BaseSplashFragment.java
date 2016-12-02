@@ -47,9 +47,8 @@ import java.util.Calendar;
 public abstract class BaseSplashFragment extends BaseLayFragment {
 
     protected long timeStart = 0;
-    protected TextView txtVersion;
-    protected TextView txtStatus;
     private ProgressDialog progressDialog;
+    private TextView txtStatus = null;
 
     @Override
     public void onAttach(Context context) {
@@ -83,11 +82,7 @@ public abstract class BaseSplashFragment extends BaseLayFragment {
         getBaseActivity().unlockBackPress();
     }
 
-    private void executeProgress(@Nullable View view) {
-        if (view != null) {
-            txtVersion = getVersionTextView(view);
-            txtStatus = getStatusTextView(view);
-        }
+    private void executeProgress(@Nullable final View view) {
         Log.d(TAG, "Splash screen shown.");
         new AsyncTask<Object, Void, String>() {
 
@@ -95,8 +90,14 @@ public abstract class BaseSplashFragment extends BaseLayFragment {
             protected void onPreExecute() {
                 Log.d(TAG, "Splash created.");
                 onSplashCreated();
-                if (txtVersion != null) {
-                    txtVersion.setText(getVersionText());
+                if (view != null) {
+                    if (view.findViewById(getVersionTextViewResId()) != null) {
+                        ((TextView) view.findViewById(getVersionTextViewResId())).setText(getVersionText());
+                    }
+                    if (getStatusTextViewResId() != 0) {
+                        //noinspection ConstantConditions
+                        txtStatus = (TextView) view.findViewById(getStatusTextViewResId());
+                    }
                 }
             }
 
@@ -161,7 +162,7 @@ public abstract class BaseSplashFragment extends BaseLayFragment {
                 }
             }
 
-            public Runnable setDisplayText(String text) {
+            Runnable setDisplayText(String text) {
                 this.text = text;
                 return this;
             }
@@ -169,14 +170,20 @@ public abstract class BaseSplashFragment extends BaseLayFragment {
         }.setDisplayText(statusText));
     }
 
-    public int getLayoutResId() {
-        return getSplashView();
-    }
-
     /**
      * Assign splash layout resource id.
      */
-    public abstract int getSplashView();
+    public abstract int getLayoutResId();
+
+    /**
+     * Assign version TextView.
+     */
+    public abstract int getVersionTextViewResId();
+
+    /**
+     * Assign status TextView.
+     */
+    public abstract int getStatusTextViewResId();
 
     /**
      * Assign splash duration.
@@ -187,16 +194,6 @@ public abstract class BaseSplashFragment extends BaseLayFragment {
      * Assign splash duration.
      */
     public abstract String getVersionText();
-
-    /**
-     * Assign version TextView.
-     */
-    public abstract TextView getVersionTextView(View view);
-
-    /**
-     * Assign status TextView.
-     */
-    public abstract TextView getStatusTextView(View view);
 
     /**
      * Event to trigger before splash show.

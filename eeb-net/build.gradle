@@ -55,4 +55,5 @@ android {
 
 dependencies {
     compile project(':eeb-core')
+    // compile 'com.google.android.gms:play-services:10.0.1'
 }

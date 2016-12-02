@@ -46,43 +46,57 @@ public class NetworkManager {
     }
 
     public static void haveInternet(Context context, final OnInternetResponseListener listener) {
+        haveInternet(context, "http://www.google.com", listener);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static void haveInternet(Context context, String serverUrl, final OnInternetResponseListener listener) {
         if (!NetworkManager.haveNetwork(context)) {
             listener.onResponse(false);
             return;
         }
-        Log.d("Network", "Check internet is reachable ...");
-        new AsyncTask<Void, Integer, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                try {
-                    InetAddress ipAddr = InetAddress.getByName("google.com");
-                    if (ipAddr.toString().equals("")) {
-                        throw new Exception("Cannot resolve host name, no internet behind network.");
-                    }
-                    HttpURLConnection conn = (HttpURLConnection) new URL("http://google.com/").openConnection();
-                    conn.setInstanceFollowRedirects(false);
-                    conn.setConnectTimeout(3500);
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("GET");
-                    DataOutputStream postOutputStream = new DataOutputStream(conn.getOutputStream());
-                    postOutputStream.write('\n');
-                    postOutputStream.close();
-                    conn.disconnect();
-                    Log.d("Network", "Internet is reachable.");
-                    return true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("Network", "Internet is unreachable.");
-                return false;
-            }
+        try {
+            final URL server = new URL(serverUrl);
+            Log.d("Network", "Check internet is reachable to " + server.getHost() + " ...");
+            new AsyncTask<Void, Integer, Boolean>() {
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                listener.onResponse(result);
-            }
-        }.execute();
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    try {
+                        // Try to resolve hostname from DNS.
+                        InetAddress ipAddress = InetAddress.getByName(server.getHost());
+                        if (ipAddress.toString().equals("")) {
+                            throw new Exception("Cannot resolve host name, no internet behind network.");
+                        }
+                        // Try connect to host.
+                        HttpURLConnection conn = (HttpURLConnection) server.openConnection();
+                        conn.setInstanceFollowRedirects(false);
+                        conn.setConnectTimeout(3500);
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setRequestMethod("GET");
+                        DataOutputStream postOutputStream = new DataOutputStream(conn.getOutputStream());
+                        postOutputStream.write('\n');
+                        postOutputStream.close();
+                        conn.disconnect();
+                        Log.d("Network", "Internet is reachable.");
+                        return true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("Network", "Internet is unreachable.");
+                    return false;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    listener.onResponse(result);
+                }
+            }.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onResponse(false);
+        }
     }
 
     public interface OnInternetResponseListener {

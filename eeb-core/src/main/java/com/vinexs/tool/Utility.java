@@ -353,11 +353,7 @@ public class Utility {
             keys = context.getSharedPreferences(part, 0).getAll();
         }
         for (Map.Entry<String, ?> entry : keys.entrySet()) {
-            try {
-                Log.d("SharedPreferences", entry.getKey() + ": " + entry.getValue().toString());
-            } catch (Exception e) {
-                Log.e("SharedPreferences", entry.getKey() + ": catched exception -> " + e.toString());
-            }
+            Log.d("SharedPreferences", entry.getKey() + ": " + String.valueOf(entry.getValue()));
         }
     }
 
