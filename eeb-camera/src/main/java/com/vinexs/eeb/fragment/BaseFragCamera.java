@@ -45,7 +45,6 @@ import android.widget.ImageView;
 import com.vinexs.eeb.BaseFragment;
 import com.vinexs.eeb.camera.R;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -213,7 +212,6 @@ public abstract class BaseFragCamera extends BaseFragment implements
 
         camera = Camera.open(cameraCurrentFacing);
         measureBestScreenEnvironment();
-        setCameraDisplayOrientation();
 
         surfaceView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -330,7 +328,7 @@ public abstract class BaseFragCamera extends BaseFragment implements
         Log.d(getTag(), "Decide Picture Size as Higher :" + bestPictureWidth + " x " + bestPictureHeight);
     }
 
-    public void setCameraDisplayOrientation() {
+    public void setSurfaceDisplayOrientation() {
         Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraCurrentFacing, info);
 
@@ -455,10 +453,10 @@ public abstract class BaseFragCamera extends BaseFragment implements
         Log.d("Camera", "surfaceCreated");
 
         Camera.Parameters camParam = camera.getParameters();
-        setDisplayOrientation(camera, 90);
         camParam.setPictureSize(bestPictureWidth, bestPictureHeight);
         camParam.setPreviewSize(bestPreviewWidth, bestPreviewHeight);
         camParam.setJpegQuality(100);
+        setSurfaceDisplayOrientation();
         camera.setParameters(camParam);
     }
 
@@ -480,17 +478,6 @@ public abstract class BaseFragCamera extends BaseFragment implements
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         isPreviewing = false;
-    }
-
-    void setDisplayOrientation(Camera camera, int angle) {
-        try {
-            Method downPolymorphic = camera.getClass().getMethod("setDisplayOrientation", int.class);
-            if (downPolymorphic != null) {
-                downPolymorphic.invoke(camera, angle);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     // endregion Surface Holder Callback ===========================================================
