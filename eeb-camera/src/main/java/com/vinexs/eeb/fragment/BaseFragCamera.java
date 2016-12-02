@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -212,6 +213,7 @@ public abstract class BaseFragCamera extends BaseFragment implements
 
         camera = Camera.open(cameraCurrentFacing);
         measureBestScreenEnvironment();
+        setCameraDisplayOrientation();
 
         surfaceView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,6 +277,7 @@ public abstract class BaseFragCamera extends BaseFragment implements
         List<Camera.Size> supportedPictureSizes = camera.getParameters().getSupportedPictureSizes();
         List<Camera.Size> supportedPreviewSizes = camera.getParameters().getSupportedPreviewSizes();
 
+        // Check best sizing
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int monitorWidth = displaymetrics.widthPixels;
@@ -325,6 +328,37 @@ public abstract class BaseFragCamera extends BaseFragment implements
 
         Log.d(getTag(), "Decide Preview Size as Higher :" + bestPreviewWidth + " x " + bestPreviewHeight);
         Log.d(getTag(), "Decide Picture Size as Higher :" + bestPictureWidth + " x " + bestPictureHeight);
+    }
+
+    public void setCameraDisplayOrientation() {
+        Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraCurrentFacing, info);
+
+        int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
     }
 
     public void takePicture() {
