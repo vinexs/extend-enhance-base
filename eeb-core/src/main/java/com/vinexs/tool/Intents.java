@@ -24,6 +24,7 @@ package com.vinexs.tool;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
@@ -150,27 +152,12 @@ public class Intents {
     // ===== One way intent
     // ==========================================================
 
-    public static void browse(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        context.startActivity(intent);
-    }
-
-    public static void dial(Context context, String telNo) {
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse(telNo));
-        context.startActivity(intent);
-    }
-
-    public static void call(Context context, String telNo) {
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse(telNo));
-        //noinspection MissingPermission
-        context.startActivity(intent);
-    }
-
     public static void showWifiSetting(Context context) {
         context.startActivity(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS));
+    }
+
+    public static void showMobileSetting(Context context) {
+        showWirelessSetting(context);
     }
 
     public static void showWirelessSetting(Context context) {
@@ -200,26 +187,104 @@ public class Intents {
     public static void playVideo(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(url), "video/*");
-        context.startActivity(intent);
-    }
-
-    // === View location
-    public static void viewLocation(Context context, float latitude, float longitude) {
-        viewLocation(context, latitude, longitude, null);
-    }
-
-    public static void viewLocation(Context context, float latitude, float longitude, String label) {
-        String uri = "geo:" + latitude + "," + longitude;
-        if (label != null) {
-            uri += "?q=" + latitude + "," + longitude + "(" + label + ")&z=16";
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        context.startActivity(intent);
+    }
+
+    public static void dial(Context context, String telNo) {
+        if (!telNo.toLowerCase().startsWith("tel:")) {
+            telNo = "tel:" + telNo;
+        }
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(telNo));
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void call(Context context, String telNo) {
+        if (!telNo.toLowerCase().startsWith("tel:")) {
+            telNo = "tel:" + telNo;
+        }
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse(telNo));
+        try {
+            //noinspection MissingPermission
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
+        } catch (SecurityException ignored) {
+            Log.e("Intents", "Fail to perform action [Intents.call]. " +
+                    "Permission Denied, developer should request permission before calling this method.");
+        }
+    }
+
+    public static void browse(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // === Share SMS
+
+    public static void sendSMS(Context context, String data) {
+        if (Determinator.isPhoneNumber(data)) {
+            sendSMS(context, data, null);
+        }
+        if (!data.toLowerCase().startsWith("smsto:")) {
+            return;
+        }
+        String[] dataArray = data.split(":");
+        String telNo = dataArray[1];
+        String message = null;
+        if (dataArray.length > 2) {
+            message = Utility.urlDecode(dataArray[2]);
+        }
+        sendSMS(context, telNo, message);
+    }
+
+    public static void sendSMS(Context context, String tel, String data) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setType("vnd.android-dir/mms-sms");
+        intent.setData(Uri.parse("sms:" + tel));
+        if (data != null) {
+            intent.putExtra("sms_body", data);
+        }
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
+        }
     }
 
     // === Send email
-    public static void sendEmail(Context context, String address) {
-        sendEmail(context, address, null, null);
+
+    public static void sendEmail(Context context, String data) {
+        if (!data.toLowerCase().startsWith("mailto:")) {
+            sendEmail(context, data, null, null);
+            return;
+        }
+        String emailAddress, subject = null, body = null;
+        if (data.indexOf('?') < 0) {
+            emailAddress = data.substring(7);
+        } else {
+            emailAddress = data.substring(7, data.indexOf('?'));
+            String query = data.substring(data.indexOf('?') + 1);
+            Bundle args = Utility.parseQueryBundle(query);
+            subject = args != null && args.containsKey("subject") ? args.getString("subject") : null;
+            body = args != null && args.containsKey("body") ? args.getString("body") : null;
+        }
+        sendEmail(context, emailAddress, subject, body);
     }
 
     public static void sendEmail(Context context, String address, String subject) {
@@ -236,10 +301,37 @@ public class Intents {
         if (body != null) {
             intent.putExtra(Intent.EXTRA_TEXT, body);
         }
-        context.startActivity(intent);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // === View Location
+
+    public static void viewLocation(Context context, String latitude, String longitude) {
+        viewLocation(context, "geo:" + latitude + "," + longitude + "?z=16");
+    }
+
+    public static void viewLocation(Context context, String latitude, String longitude, String label) {
+        viewLocation(context, "geo:0,0?q=" + latitude + "," + longitude + "(" + label + ")&z=16");
+    }
+
+    public static void viewLocation(Context context, String data) {
+        if (!data.toLowerCase().startsWith("geo:")) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data));
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.action_device_not_support, Toast.LENGTH_SHORT).show();
+        }
     }
 
     // === Share text
+
     public static void shareText(Context context, String text) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
@@ -248,6 +340,7 @@ public class Intents {
     }
 
     // === Share image
+
     public static void shareImage(Context context, BitmapDrawable bitmapDrawable) {
         shareImage(context, bitmapDrawable, null);
     }
@@ -262,9 +355,6 @@ public class Intents {
     }
 
     public static void shareImage(Context context, Uri filepath, String imageTitle) {
-//        if (imageTitle == null) {
-//            imageTitle = "Image";
-//        }
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");

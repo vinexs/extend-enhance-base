@@ -379,21 +379,8 @@ public class Utility {
     }
 
     /* ------------- Data parser ------------- */
-    public static Bundle queryToBundle(String str) {
-        Bundle args = new Bundle();
-        String[] varPair = str.split("&");
-        for (String var : varPair) {
-            String[] thisVar = var.split("=");
-            if (thisVar.length < 2) {
-                args.putString(thisVar[0], "");
-            } else {
-                args.putString(thisVar[0], urlDecode(thisVar[1]));
-            }
-        }
-        return args;
-    }
 
-    public static Map<String, String> queryToArrayMap(String str) {
+    public static Map<String, String> parseQuery(String str) {
         Map<String, String> args;
         args = new LinkedHashMap<>();
         String[] varPair = str.split("&");
@@ -403,6 +390,20 @@ public class Utility {
                 args.put(thisVar[0], "");
             } else {
                 args.put(thisVar[0], urlDecode(thisVar[1]));
+            }
+        }
+        return args;
+    }
+
+    public static Bundle parseQueryBundle(String str) {
+        Bundle args = new Bundle();
+        String[] varPair = str.split("&");
+        for (String var : varPair) {
+            String[] thisVar = var.split("=");
+            if (thisVar.length < 2) {
+                args.putString(thisVar[0], "");
+            } else {
+                args.putString(thisVar[0], urlDecode(thisVar[1]));
             }
         }
         return args;

@@ -22,14 +22,16 @@
 
 <resources>
 
+    <!-- Application -->
     <string name="app_close">你確定要離開 %s 嗎?</string>
     <string name="app_close_back">再按下退出鍵以關閉 %s</string>
     <string name="app_not_found">找不到應用程式。</string>
+
+    <!-- Verb -->
     <string name="back">返回</string>
     <string name="cancel">取消</string>
     <string name="confirm">確認</string>
     <string name="download">下載</string>
-    <string name="error_occurred">發生錯誤了</string>
     <string name="later">稍後</string>
     <string name="loading">載入中&#8230;</string>
     <string name="next">下一步</string>
@@ -39,5 +41,9 @@
     <string name="skip">略過</string>
     <string name="update">更新</string>
     <string name="yes">是</string>
+
+    <!-- Error -->
+    <string name="error_occurred">發生錯誤了</string>
+    <string name="action_device_not_support">您的設備不支持此操作。</string>
 
 </resources>

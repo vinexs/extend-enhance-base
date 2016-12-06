@@ -22,15 +22,16 @@
 
 <resources>
 
-    <string name="app_name">app_name</string>
+    <!-- Application -->
     <string name="app_close">Do you want to leave %s?</string>
     <string name="app_close_back">Press BACK again to close %s</string>
     <string name="app_not_found">Application not found.</string>
+
+    <!-- Verb -->
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="download">Download</string>
-    <string name="error_occurred">Error Occurred</string>
     <string name="later">Later</string>
     <string name="loading">Loading&#8230;</string>
     <string name="next">Next</string>
@@ -40,5 +41,9 @@
     <string name="skip">Skip</string>
     <string name="update">Update</string>
     <string name="yes">Yes</string>
+
+    <!-- Error -->
+    <string name="error_occurred">Error Occurred</string>
+    <string name="action_device_not_support">This action not supported for your device.</string>
 
 </resources>
