@@ -22,14 +22,13 @@
 
 package com.vinexs.eeb;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
@@ -50,13 +49,13 @@ import android.widget.Toast;
 
 import com.vinexs.BuildConfig;
 import com.vinexs.R;
+import com.vinexs.eeb.misc.BaseContextWrapper;
 import com.vinexs.eeb.misc.BaseExceptionHandler;
 import com.vinexs.eeb.misc.BundleArgs;
 import com.vinexs.tool.Utility;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
-import java.util.Locale;
 
 @SuppressWarnings("unused")
 public abstract class BaseActivity extends AppCompatActivity {
@@ -82,14 +81,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Boolean hasLeftDrawer = false;
     protected Boolean hasRightDrawer = false;
 
-    // Theme Res
-    protected int currentTheme = 0;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setOverflowMenuAvailable();
-        setCustomSetting();
         setContentFrame();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawerLayout != null) {
@@ -112,14 +107,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         BackStackSyncStatus();
         if (!BuildConfig.DEBUG && exceptionHandler != null) {
             Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (currentTheme != PreferenceManager.getDefaultSharedPreferences(this).getInt("theme", getBaseContext().getApplicationInfo().theme)) {
-            restart();
         }
     }
 
@@ -356,7 +343,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    // ================  Fragments Control =========================
+    // ================  Drawer Control =========================
 
     public void addLeftDrawer(Fragment frag) {
         addLeftDrawer(frag, "LEFT_DRAWER");
@@ -406,43 +393,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         drawerToggle.setDrawerIndicatorEnabled(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    /**
-     * <p>The user should be pointed(through an intent) to the system settings to change it manually.
-     * The application should handle its localization on its own just like described.</p>
-     * <p>It should run in onCreate() method and before setContentView().</p>
-     * <p><font color="red">Don't forget to add android:configChanges="layoutDirection|locale" to
-     * every activity at AndroidManifest.</font></p>
-     */
-    public void setCustomSetting() {
-        SharedPreferences sharePref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Override application original locale.
-        String defaultLocale = Locale.getDefault().toString();
-        String appLocale = sharePref.getString("locale", defaultLocale);
-        if (!appLocale.isEmpty() && !defaultLocale.equals(appLocale)) {
-            Locale locale;
-            if (appLocale.contains("_")) {
-                String[] localePart = appLocale.split("_");
-                locale = new Locale(localePart[0], localePart[1]);
-            } else {
-                locale = new Locale(appLocale);
-            }
-            Locale.setDefault(locale);
-            Configuration config = getBaseContext().getResources().getConfiguration();
-            config.locale = locale;
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-
-        // Override application original Theme.
-        try {
-            Integer appTheme = sharePref.getInt("theme", getBaseContext().getApplicationInfo().theme);
-            currentTheme = appTheme;
-            setTheme(appTheme);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -513,10 +463,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (animationEnter != 0 && animationExit != 0) {
             transaction.setCustomAnimations(animationEnter, animationExit);
         }
-        if (breadCrumbTitle != null && !breadCrumbTitle.isEmpty()) {
+        if (breadCrumbTitle != null) {
             transaction.setBreadCrumbTitle(breadCrumbTitle);
         }
-        if (breadCrumbShortTitle != null && !breadCrumbShortTitle.isEmpty()) {
+        if (breadCrumbShortTitle != null) {
             transaction.setBreadCrumbShortTitle(breadCrumbShortTitle);
         }
         if (transaction.isAddToBackStackAllowed() && addToBackStack) {
@@ -580,10 +530,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (animationEnter != 0 && animationExit != 0) {
             transaction.setCustomAnimations(animationEnter, animationExit);
         }
-        if (breadCrumbTitle != null && !breadCrumbTitle.isEmpty()) {
+        if (breadCrumbTitle != null) {
             transaction.setBreadCrumbTitle(breadCrumbTitle);
         }
-        if (breadCrumbShortTitle != null && !breadCrumbShortTitle.isEmpty()) {
+        if (breadCrumbShortTitle != null) {
             transaction.setBreadCrumbShortTitle(breadCrumbShortTitle);
         }
         if (transaction.isAddToBackStackAllowed() && addToBackStack) {
@@ -622,6 +572,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    // ================   (Override Setting) =========================
+
+    /**
+     * Override original context setting with SharedPreferences variables.
+     * * Called from activity itself.
+     *
+     * @param newBase Context Context from activity.
+     */
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(new BaseContextWrapper(newBase));
+    }
+
     // ================  Hack =========================
 
     /**
@@ -642,5 +605,4 @@ public abstract class BaseActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }

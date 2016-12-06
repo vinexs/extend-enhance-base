@@ -210,10 +210,10 @@ public abstract class BaseFragment extends Fragment {
         if (animationEnter != 0 && animationExit != 0) {
             transaction.setCustomAnimations(animationEnter, animationExit);
         }
-        if (breadCrumbTitle != null && !breadCrumbTitle.isEmpty()) {
+        if (breadCrumbTitle != null) {
             transaction.setBreadCrumbTitle(breadCrumbTitle);
         }
-        if (breadCrumbShortTitle != null && !breadCrumbShortTitle.isEmpty()) {
+        if (breadCrumbShortTitle != null) {
             transaction.setBreadCrumbShortTitle(breadCrumbShortTitle);
         }
         if (transaction.isAddToBackStackAllowed() && addToBackStack) {
@@ -277,10 +277,10 @@ public abstract class BaseFragment extends Fragment {
         if (animationEnter != 0 && animationExit != 0) {
             transaction.setCustomAnimations(animationEnter, animationExit);
         }
-        if (breadCrumbTitle != null && !breadCrumbTitle.isEmpty()) {
+        if (breadCrumbTitle != null) {
             transaction.setBreadCrumbTitle(breadCrumbTitle);
         }
-        if (breadCrumbShortTitle != null && !breadCrumbShortTitle.isEmpty()) {
+        if (breadCrumbShortTitle != null) {
             transaction.setBreadCrumbShortTitle(breadCrumbShortTitle);
         }
         if (transaction.isAddToBackStackAllowed() && addToBackStack) {
