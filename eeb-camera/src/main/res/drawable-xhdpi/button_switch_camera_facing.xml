@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:background="@null" android:drawable="@mipmap/switch_camera_facing_hover" android:state_pressed="true" />
+
+    <item android:background="@null" android:drawable="@mipmap/switch_camera_facing_hover" android:state_selected="true" />
+
+    <item android:background="@null" android:drawable="@mipmap/switch_camera_facing" />
+
+</selector>
