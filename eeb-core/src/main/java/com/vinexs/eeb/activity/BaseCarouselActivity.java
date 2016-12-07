@@ -46,7 +46,7 @@ public abstract class BaseCarouselActivity extends BaseActivity {
     private CarouselAdapter carouselAdapter;
 
     @Override
-    public int getContentFrame() {
+    public int getContentFrameResId() {
         return R.layout.carousel_base_activity;
     }
 

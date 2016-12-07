@@ -47,7 +47,7 @@ public abstract class BaseCameraActivity extends BaseActivity implements BaseFra
 
 
     @Override
-    public int getContentFrame() {
+    public int getContentFrameResId() {
         return R.layout.frame_base_activity;
     }
 

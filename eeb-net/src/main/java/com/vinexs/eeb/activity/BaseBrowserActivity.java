@@ -49,7 +49,7 @@ import java.net.URI;
 public abstract class BaseBrowserActivity extends BaseActivity {
 
     @Override
-    public int getContentFrame() {
+    public int getContentFrameResId() {
         return R.layout.frame_base_activity;
     }
 

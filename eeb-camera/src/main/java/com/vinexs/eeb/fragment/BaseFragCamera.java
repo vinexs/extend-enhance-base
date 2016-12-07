@@ -259,6 +259,8 @@ public abstract class BaseFragCamera extends BaseFragment implements
             cameraCurrentFacing = (cameraCurrentFacing == Camera.CameraInfo.CAMERA_FACING_BACK) ?
                     Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
 
+            onCameraSwitched(cameraCurrentFacing);
+
             isCameraSwitching = false;
             resumeCamera();
         }
@@ -497,6 +499,8 @@ public abstract class BaseFragCamera extends BaseFragment implements
     public abstract int getSwitchCameraButtonResId();
 
     public abstract int getShutterButtonResId();
+
+    public abstract void onCameraSwitched(Integer currentFacing);
 
     public abstract void onShutterAction();
 

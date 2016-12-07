@@ -46,7 +46,7 @@ public abstract class BaseFragment extends Fragment {
     protected final String TAG = getClass().getSimpleName();
 
     /**
-     * Should be overwrite in onCreate method by extended class.
+     * Should be overwrite in onCreate method from extended class.
      */
     protected Boolean noClickThroughView = true;
 
@@ -56,6 +56,11 @@ public abstract class BaseFragment extends Fragment {
     protected Bundle args = null;
     protected Context context = null;
 
+    /**
+     * Get bread crumb title from argument bundle.
+     *
+     * @return Bread crumb title
+     */
     public String getBreadCrumbTitle() {
         if (args == null || !args.containsKey(BundleArgs.breadCrumbTitle)) {
             return null;
@@ -63,6 +68,10 @@ public abstract class BaseFragment extends Fragment {
         return args.getString(BundleArgs.breadCrumbTitle);
     }
 
+    /**
+     * Get bread crumb short title from argument bundle.
+     * @return Bread crumb short title
+     */
     public String getBreadCrumbShortTitle() {
         if (args == null || !args.containsKey(BundleArgs.breadCrumbShortTitle)) {
             return null;
@@ -70,6 +79,10 @@ public abstract class BaseFragment extends Fragment {
         return args.getString(BundleArgs.breadCrumbShortTitle);
     }
 
+    /**
+     * Get fragment tag name from argument bundle.
+     * @return Fragment tag name
+     */
     public String getFragmentName() {
         if (args == null || !args.containsKey(BundleArgs.fragmentName)) {
             return getClass().getSimpleName();
@@ -77,6 +90,10 @@ public abstract class BaseFragment extends Fragment {
         return args.getString(BundleArgs.fragmentName);
     }
 
+    /**
+     * Get fragment id from argument bundle.
+     * @return Fragment id
+     */
     public int getFragmentId() {
         if (args == null || !args.containsKey(BundleArgs.fragmentId)) {
             return 0;
@@ -84,6 +101,10 @@ public abstract class BaseFragment extends Fragment {
         return args.getInt(BundleArgs.fragmentId);
     }
 
+    /**
+     * Get parent BaseActivity.
+     * @return BaseActivity
+     */
     public BaseActivity getBaseActivity() {
         return (BaseActivity) getActivity();
     }
@@ -139,16 +160,33 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * Assign fragment layout recourse id. If fragment do not have layout, leave it 0.
+     * @return
+     */
     public abstract int getLayoutResId();
 
+    /**
+     * Assign toolbar resource id. If layout do not have toolbar, leave it 0.
+     * @return Toolbar resource id.
+     */
     public abstract int getToolbarResId();
 
-    // ================  Fragments Control =========================
+    // region Fragments Control ====================================================================
 
+    /**
+     * Get attached fragment by tag from {@link FragmentManager}
+     * @param fragName Fragment TAG in String.
+     * @return Fragment matched with TAG.
+     */
     public Fragment getExistFragment(String fragName) {
         return getActivity().getSupportFragmentManager().findFragmentByTag(fragName);
     }
 
+    /**
+     * Determine current is the latest attached fragment.
+     * @return Is latest fragment
+     */
     public Boolean isOnTop() {
         FragmentManager fragMgr = getActivity().getSupportFragmentManager();
         FragmentManager.BackStackEntry backEntry = fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
@@ -156,10 +194,19 @@ public abstract class BaseFragment extends Fragment {
         return backEntryName != null && backEntryName.equals(getFragmentName());
     }
 
+    /**
+     * Add a fragment to default FrameLayout(R.id.frame_content).
+     * @param fragment Fragment
+     */
     public void addFragment(Fragment fragment) {
         addFragment(R.id.frame_content, fragment);
     }
 
+    /**
+     * Add a fragment to targeted FrameLayout.
+     * @param viewId Targeted FrameLayout resource id
+     * @param fragment Fragment
+     */
     public void addFragment(int viewId, Fragment fragment) {
         if (fragment.isAdded()) {
             return;
@@ -223,10 +270,19 @@ public abstract class BaseFragment extends Fragment {
         transaction.add(viewId, fragment, fragName).commitAllowingStateLoss();
     }
 
+    /**
+     * Replace a fragment from default FrameLayout(R.id.frame_content) with another fragment.
+     * @param fragment Fragment
+     */
     public void replaceFragment(Fragment fragment) {
         replaceFragment(R.id.frame_content, fragment);
     }
 
+    /**
+     * Replace a fragment from targeted FrameLayout with another fragment.
+     * @param viewId Targeted FrameLayout resource id
+     * @param fragment Fragment
+     */
     public void replaceFragment(int viewId, Fragment fragment) {
         if (fragment.isAdded()) {
             return;
@@ -290,6 +346,10 @@ public abstract class BaseFragment extends Fragment {
         transaction.replace(viewId, fragment, fragName).commitAllowingStateLoss();
     }
 
+    /**
+     * Show a hidden fragment.
+     * @param fragment Fragment
+     */
     public void showFragment(Fragment fragment) {
         if (!fragment.isAdded()) {
             return;
@@ -298,6 +358,10 @@ public abstract class BaseFragment extends Fragment {
         transaction.show(fragment).commitAllowingStateLoss();
     }
 
+    /**
+     * Hide a visible fragment.
+     * @param fragment Fragment
+     */
     public void hideFragment(Fragment fragment) {
         if (!fragment.isAdded()) {
             return;
@@ -306,6 +370,10 @@ public abstract class BaseFragment extends Fragment {
         transaction.hide(fragment).commitAllowingStateLoss();
     }
 
+    /**
+     * Remove a fragment from {@link FragmentManager}.
+     * @param fragment Fragment
+     */
     public void removeFragment(Fragment fragment) {
         if (!fragment.isAdded()) {
             return;
@@ -319,8 +387,12 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * Remove current fragment from {@link FragmentManager}.
+     */
     public void removeSelf() {
         removeFragment(this);
     }
 
+    // endregion Fragments Control =================================================================
 }

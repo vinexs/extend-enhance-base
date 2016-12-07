@@ -43,7 +43,7 @@ public abstract class BasePrefActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setToolbar(R.id.toolbar);
+        setToolbar(getToolbarResId());
 
         if (savedInstanceState == null) {
 
@@ -84,7 +84,7 @@ public abstract class BasePrefActivity extends BaseActivity {
     }
     
     @Override
-    public int getContentFrame() {
+    public int getContentFrameResId() {
         setPreferenceFrame();
         return 0;
     }
@@ -117,6 +117,8 @@ public abstract class BasePrefActivity extends BaseActivity {
     @Override
     public void onBaseBackStackChanged(boolean noTurnBack, int entryCount) {
     }
+
+    public abstract int getToolbarResId();
 
     public abstract int getPreferencesFromResource();
 

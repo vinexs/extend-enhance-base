@@ -23,6 +23,7 @@
 package com.vinexs.eeb;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -67,6 +68,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final int CLOSE_ACTION_NONE = 0;
     public static final int CLOSE_DIALOG = 1;
     public static final int CLOSE_TOAST = 2;
+
+    public static final String LEFT_DRAWER_NAME = "LEFT_DRAWER";
+    public static final String RIGHT_DRAWER_NAME = "RIGHT_DRAWER";
 
     protected int closeAction = BaseActivity.CLOSE_DIALOG;
 
@@ -122,6 +126,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public abstract void onNewIntent(Intent intent);
 
+    /**
+     * Restart application programmatically.
+     */
     public void restart() {
         final Bundle outState = new Bundle();
         onSaveInstanceState(outState);
@@ -131,17 +138,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // ================  Default layout frame  =========================
+    // region Default layout frame =================================================================
 
+    /**
+     * * It called by {@link #onCreate(Bundle)}) from {@link BaseActivity} automatically. <br/>
+     * Set a layout as the base of this application, all fragment will attache on it.
+     */
     public void setContentFrame() {
-        int layoutResId = getContentFrame();
+        int layoutResId = getContentFrameResId();
         if (layoutResId > 0) {
             setContentView(layoutResId);
         }
     }
 
-    public abstract int getContentFrame();
+    /**
+     * Assign layout resource id to be content frame.
+     *
+     * @return Layout resource id
+     */
+    public abstract int getContentFrameResId();
 
+    /**
+     * Set a new Toolbar as action bar.
+     * @param resId Toolbar resource id
+     */
     protected void setToolbar(int resId) {
         Toolbar toolbar = (Toolbar) findViewById(resId);
         if (toolbar != null) {
@@ -149,6 +169,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set a new Toolbar as action bar.
+     * @param toolbar Toolbar found from view
+     */
     protected void setToolbar(Toolbar toolbar) {
         if (toolbar == null) {
             return;
@@ -165,10 +189,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    // ================  Handle back and fragment  =========================
+    // endregion Default layout frame ==============================================================
+
+    // region Back Handling ========================================================================
 
     /**
-     * To add system default back stack, put this method to onCreate().
+     * * It called by {@link #onCreate(Bundle)}) from {@link BaseActivity} automatically. <br/>
+     * It used to add system default back stack.<br/>
      */
     public void setDefaultBackStackListener() {
         getSupportFragmentManager().addOnBackStackChangedListener(new OnBackStackChangedListener() {
@@ -179,6 +206,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Event to trigger when back button / (android.R.id.home) was hit.
+     */
     @Override
     public void onBackPressed() {
         Utility.hideKeyBroad(this);
@@ -202,7 +232,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Require setDefaultBackStackListener() ran in onCreate
+     * When {@link #setDefaultBackStackListener()} ran in {@link #onCreate(Bundle)},<br/>
+     * this method will execute on every back stack change.
      */
     protected void BackStackSyncStatus() {
         try {
@@ -253,6 +284,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set or recover back stack BreadCrumbTitle from fragment entry.
+     * */
     public void setBackStackTitle(String title) {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar == null) {
@@ -261,6 +295,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         actionbar.setTitle(title);
     }
 
+    /**
+     * Set or recover back stack BreadCrumbTitle from fragment entry.
+     * */
     public void setBackStackTitle(SpannableString title) {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar == null) {
@@ -269,8 +306,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         actionbar.setTitle(title);
     }
 
+    /**
+     * When {@link #BackStackSyncStatus()} executed, it will fire this method.
+     * @param noTurnBack Is there are back stack still can go back.
+     * @param entryCount Fragment back stack entry count in {@link FragmentManager}
+     */
     public abstract void onBaseBackStackChanged(boolean noTurnBack, int entryCount);
 
+    /**
+     * Handling (android.R.id.home) hit event. Determine it is a back or just draw the drawer.
+     * @param item Menu item hit.
+     * @return Is event already handle.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
@@ -288,18 +335,32 @@ public abstract class BaseActivity extends AppCompatActivity {
         return drawerToggle.onOptionsItemSelected(item);
     }
 
+    /**
+     * Lock back press button event.
+     * !! User can still exit by pressing home button.
+     */
     public void lockBackPress() {
         allowBack = false;
     }
 
+    /**
+     * Unlock locked back button.
+     */
     public void unlockBackPress() {
         allowBack = true;
     }
 
+    /**
+     * Set close action when user close the application
+     * @param action Action to take [CLOSE_DIALOG, CLOSE_TOAST, CLOSE_NONE].
+     */
     public void setCloseAction(int action) {
         closeAction = action;
     }
 
+    /**
+     * Handle user closing application event. To change behaviour, use method {@link #setCloseAction(int)}.
+     */
     public void closeAppsConfirmation() {
         switch (closeAction) {
             case CLOSE_DIALOG:
@@ -343,12 +404,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    // ================  Drawer Control =========================
+    // endregion Back Handling =====================================================================
 
+    // region Drawer Control =======================================================================
+
+    /**
+     * Add a fragment to left drawer(R.id.frame_drawer_left)
+     * @param frag Fragment
+     */
     public void addLeftDrawer(Fragment frag) {
-        addLeftDrawer(frag, "LEFT_DRAWER");
+        addLeftDrawer(frag, LEFT_DRAWER_NAME);
     }
 
+    /**
+     * Add a fragment to left drawer(R.id.frame_drawer_left) with custom TAG.
+     * @param frag Fragment
+     * @param tag Tag name in String
+     */
     public void addLeftDrawer(Fragment frag, String tag) {
         if (hasLeftDrawer) {
             return;
@@ -360,10 +432,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         setDrawerToggleEnable();
     }
 
+    /**
+     * Add a fragment to right drawer(R.id.frame_drawer_right)
+     * @param frag Fragment
+     */
     public void addRightDrawer(Fragment frag) {
-        addRightDrawer(frag, "RIGHT_DRAWER");
+        addRightDrawer(frag, RIGHT_DRAWER_NAME);
     }
 
+    /**
+     * Add a fragment to right drawer(R.id.frame_drawer_right) with custom TAG.
+     * @param frag Fragment
+     * @param tag Tag name in String
+     */
     public void addRightDrawer(Fragment frag, String tag) {
         if (hasRightDrawer) {
             return;
@@ -375,14 +456,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         setDrawerToggleEnable();
     }
 
+    /**
+     * Close left drawer programmatically if it is opened.
+     */
     public void closeLeftDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 
+    /**
+     * Close right drawer programmatically if it is opened.
+     */
     public void closeRightDrawer() {
         drawerLayout.closeDrawer(GravityCompat.END);
     }
 
+    /**
+     * Set application can have an drawer.<br/>
+     * It called from {@link #addLeftDrawer(Fragment)} or {@link #addRightDrawer(Fragment)}
+     */
     private void setDrawerToggleEnable() {
         if (drawerToggle != null) {
             return;
@@ -396,12 +487,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    // ================  Fragments Control =========================
+    // endregion Drawer Control ====================================================================
 
+    // region Fragments Control ====================================================================
+
+    /**
+     * Get attached fragment by tag from {@link FragmentManager}
+     * @param fragName Fragment TAG in String.
+     * @return Fragment matched with TAG.
+     */
     public Fragment getExistFragment(String fragName) {
         return getSupportFragmentManager().findFragmentByTag(fragName);
     }
 
+    /**
+     * Get latest attached fragment from {@link FragmentManager}
+     * @return Latest attached Fragment
+     */
     public Fragment getTopFragment() {
         FragmentManager fragMgr = getSupportFragmentManager();
         FragmentManager.BackStackEntry backEntry = fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
@@ -409,10 +511,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         return fragMgr.findFragmentByTag(backEntryName);
     }
 
+    /**
+     * Add a fragment to default FrameLayout(R.id.frame_content).
+     * @param fragment Fragment
+     */
     public void addFragment(Fragment fragment) {
         addFragment(R.id.frame_content, fragment);
     }
 
+    /**
+     * Add a fragment to targeted FrameLayout.
+     * @param viewId Targeted FrameLayout resource id
+     * @param fragment Fragment
+     */
     public void addFragment(int viewId, Fragment fragment) {
         if (fragment.isAdded()) {
             return;
@@ -476,10 +587,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         transaction.add(viewId, fragment, fragName).commitAllowingStateLoss();
     }
 
+    /**
+     * Replace a fragment from default FrameLayout(R.id.frame_content) with another fragment.
+     * @param fragment Fragment
+     */
     public void replaceFragment(Fragment fragment) {
         replaceFragment(R.id.frame_content, fragment);
     }
 
+    /**
+     * Replace a fragment from targeted FrameLayout with another fragment.
+     * @param viewId Targeted FrameLayout resource id
+     * @param fragment Fragment
+     */
     public void replaceFragment(int viewId, Fragment fragment) {
         if (fragment.isAdded()) {
             return;
@@ -543,6 +663,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         transaction.replace(viewId, fragment, fragName).commitAllowingStateLoss();
     }
 
+    /**
+     * Show a hidden fragment.
+     * @param fragment Fragment
+     */
     public void showFragment(Fragment fragment) {
         if (!fragment.isHidden()) {
             return;
@@ -551,6 +675,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         transaction.show(fragment).commitAllowingStateLoss();
     }
 
+    /**
+     * Hide a visible fragment.
+     * @param fragment Fragment
+     */
     public void hideFragment(Fragment fragment) {
         if (!fragment.isAdded()) {
             return;
@@ -559,6 +687,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         transaction.hide(fragment).commitAllowingStateLoss();
     }
 
+    /**
+     * Remove a fragment from {@link FragmentManager}.
+     * @param fragment Fragment
+     */
     public void removeFragment(Fragment fragment) {
         if (!fragment.isAdded()) {
             return;
@@ -572,26 +704,40 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    // ================   (Override Setting) =========================
+    // endregion Fragments Control =================================================================
+
+    // region Override Setting =====================================================================
 
     /**
-     * Override original context setting with SharedPreferences variables.
-     * * Called from activity itself.
-     *
-     * @param newBase Context Context from activity.
+     * <p>* It called from activity itself.</p>
+     * It used to override original context setting with SharedPreferences variables.<br/>
+     * For using your own ContextWrapper, developer should override {@link #getBaseContext(Context)} method.
+     * @param newBase Context from activity.
      */
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new BaseContextWrapper(newBase));
+        super.attachBaseContext(getBaseContext(newBase));
     }
 
-    // ================  Hack =========================
+    /**
+     * Provide ContextWrapper to {@link #attachBaseContext(Context)} method.
+     *
+     * @param newBase Context from activity.
+     * @return ContextWrapper
+     */
+    public ContextWrapper getBaseContext(Context newBase) {
+        return new BaseContextWrapper(newBase);
+    }
+
+    // endregion Override Setting ==================================================================
+
+    // region Hacking feature ======================================================================
 
     /**
+     * * It called by {@link #onCreate(Bundle)}) from {@link BaseActivity} automatically. <br/>
      * <p>This hack used to add overflow menu button if device has physical menu button.
      * Phones with a physical menu button don't have an overflow menu in the ActionBar. </p>
      * <p>This avoids ambiguity for the user, essentially having two buttons available to open the exact same menu.</p>
-     * <p>It should run in onCreate() method and before setContentView().</p>
      */
     public void setOverflowMenuAvailable() {
         try {
@@ -605,4 +751,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    // endregion Hacking feature ===================================================================
 }
