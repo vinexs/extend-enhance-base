@@ -457,6 +457,39 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * To control lock or unlock left drawer.<br/>
+     * @param mode DrawerLayout.LOCK_MODE_UNLOCKED or DrawerLayout.LOCK_MODE_LOCKED_CLOSED.
+     */
+    public void setLeftDrawerLockMode(final int mode) {
+        if (drawerLayout == null) {
+            return;
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.setDrawerLockMode(mode, GravityCompat.START);
+            }
+        });
+    }
+
+    /**
+     * To control lock or unlock right drawer.<br/>
+     *
+     * @param mode DrawerLayout.LOCK_MODE_UNLOCKED or DrawerLayout.LOCK_MODE_LOCKED_CLOSED.
+     */
+    public void setRightDrawerLockMode(final int mode) {
+        if (drawerLayout == null) {
+            return;
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.setDrawerLockMode(mode, GravityCompat.END);
+            }
+        });
+    }
+
+    /**
      * Close left drawer programmatically if it is opened.
      */
     public void closeLeftDrawer() {

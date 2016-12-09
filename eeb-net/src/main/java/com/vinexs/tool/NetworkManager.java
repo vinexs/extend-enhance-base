@@ -82,7 +82,7 @@ public class NetworkManager {
                         Log.d("Network", "Internet is reachable.");
                         return true;
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e("Network", e.getMessage());
                     }
                     Log.d("Network", "Internet is unreachable.");
                     return false;
@@ -92,6 +92,7 @@ public class NetworkManager {
                 protected void onPostExecute(Boolean result) {
                     listener.onResponse(result);
                 }
+
             }.execute();
         } catch (Exception e) {
             e.printStackTrace();

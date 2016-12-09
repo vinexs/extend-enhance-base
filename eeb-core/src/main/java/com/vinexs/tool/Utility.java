@@ -192,6 +192,18 @@ public class Utility {
         }
     }
 
+    public static boolean checkInstalled(Context context, String packageName) {
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, 0);
+            return info != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 	/* ------------- User ------------- */
 
     /**

@@ -119,4 +119,9 @@ public abstract class BaseLayFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public int getToolbarResId() {
+        return 0;
+    }
+
 }
