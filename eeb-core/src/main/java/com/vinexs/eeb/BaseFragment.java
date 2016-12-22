@@ -162,7 +162,7 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * Assign fragment layout recourse id. If fragment do not have layout, leave it 0.
-     * @return
+     * @return Fragment layout id.
      */
     public abstract int getLayoutResId();
 

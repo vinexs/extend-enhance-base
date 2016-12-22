@@ -69,13 +69,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final int CLOSE_DIALOG = 1;
     public static final int CLOSE_TOAST = 2;
 
+    public static final int DRAWER_MAIN_ONLY = 0;
+    public static final int DRAWER_EVERYWHERE = 1;
+
     public static final String LEFT_DRAWER_NAME = "LEFT_DRAWER";
     public static final String RIGHT_DRAWER_NAME = "RIGHT_DRAWER";
 
     protected int closeAction = BaseActivity.CLOSE_DIALOG;
+    protected int drawerBehavior = BaseActivity.DRAWER_MAIN_ONLY;
 
-    protected boolean closeByDialog = true;
-    protected boolean closeByToast = false;
     protected boolean allowBack = true;
     protected boolean pressBackToClose = false;
 
@@ -90,20 +92,52 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setOverflowMenuAvailable();
         setContentFrame();
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawerLayout != null) {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
         }
+
+        if (savedInstanceState != null) {
+            hasLeftDrawer = savedInstanceState.getBoolean("hasLeftDrawer");
+            hasRightDrawer = savedInstanceState.getBoolean("hasRightDrawer");
+            allowBack = savedInstanceState.getBoolean("allowBack");
+            closeAction = savedInstanceState.getInt("closeAction");
+        }
+
         setDefaultBackStackListener();
     }
 
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (hasLeftDrawer || hasRightDrawer) {
-            drawerToggle.syncState();
+            getDrawerToggle().syncState();
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("hasLeftDrawer", hasLeftDrawer);
+        outState.putBoolean("hasRightDrawer", hasRightDrawer);
+        outState.putBoolean("allowBack", allowBack);
+        outState.putInt("closeAction", closeAction);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        invalidateOptionsMenu();
+        if (hasLeftDrawer || hasRightDrawer) {
+            getDrawerToggle().onConfigurationChanged(newConfig);
+            getDrawerToggle().syncState();
+        }
+    }
+
+    @Override
+    public abstract void onNewIntent(Intent intent);
+
 
     @Override
     public void onStart() {
@@ -113,18 +147,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);
         }
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        invalidateOptionsMenu();
-        if (hasLeftDrawer || hasRightDrawer) {
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
-
-    @Override
-    public abstract void onNewIntent(Intent intent);
 
     /**
      * Restart application programmatically.
@@ -249,7 +271,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     }
                 }
-                if (drawerLayout != null) {
+                if (drawerBehavior == DRAWER_MAIN_ONLY && drawerLayout != null) {
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
                 }
@@ -408,6 +430,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // region Drawer Control =======================================================================
 
+    public boolean hasLeftDrawer() {
+        return hasLeftDrawer;
+    }
+
+    public boolean hasRightDrawer() {
+        return hasRightDrawer;
+    }
+
     /**
      * Add a fragment to left drawer(R.id.frame_drawer_left)
      * @param frag Fragment
@@ -504,20 +534,32 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * Get drawer toggle controller
+     * @return DrawerToggle
+     */
+    public ActionBarDrawerToggle getDrawerToggle() {
+        if (drawerToggle == null) {
+            drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
+        }
+        return drawerToggle;
+    }
+
+    /**
      * Set application can have an drawer.<br/>
      * It called from {@link #addLeftDrawer(Fragment)} or {@link #addRightDrawer(Fragment)}
      */
     private void setDrawerToggleEnable() {
-        if (drawerToggle != null) {
-            return;
-        }
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
+        ActionBarDrawerToggle drawerToggle = getDrawerToggle();
         drawerToggle.syncState();
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.setDrawerIndicatorEnabled(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    public void setDrawerBehavior(int behavior) {
+        drawerBehavior = behavior;
     }
 
     // endregion Drawer Control ====================================================================

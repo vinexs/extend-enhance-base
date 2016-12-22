@@ -269,7 +269,7 @@ public abstract class AbstractEnhancedWebView extends WebView {
     public void evaluateJavascript(final String script) {
         try {
             final WebView webview = this;
-            if (Build.VERSION.SDK_INT >= 19 /*Build.VERSION_CODES.KITKAT*/) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 webview.post(new Runnable() {
                     @Override
                     public void run() {
@@ -341,7 +341,7 @@ public abstract class AbstractEnhancedWebView extends WebView {
     }
 
     @Override
-    @SuppressLint("JavascriptInterface")
+    @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
     public void addJavascriptInterface(Object object, String name) {
         super.addJavascriptInterface(object, name);
     }

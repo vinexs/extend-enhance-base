@@ -33,6 +33,7 @@ import java.io.DataOutputStream;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
@@ -94,6 +95,9 @@ public class NetworkManager {
                 }
 
             }.execute();
+        } catch (MalformedURLException e) {
+            Log.e("Network", "The server URL you provided is not a valid format of URL.");
+            listener.onResponse(false);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onResponse(false);

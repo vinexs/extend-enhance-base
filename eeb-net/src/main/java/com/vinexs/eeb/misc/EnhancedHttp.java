@@ -24,7 +24,9 @@ package com.vinexs.eeb.misc;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
+import android.webkit.CookieManager;
 
 import com.vinexs.tool.WebkitCookieManager;
 
@@ -71,7 +73,12 @@ public class EnhancedHttp {
 
     public EnhancedHttp(Context context) {
         this.context = context;
-        android.webkit.CookieManager.getInstance().setAcceptCookie(true);
+        CookieManager cookieManager = CookieManager.getInstance();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            //noinspection deprecation
+            android.webkit.CookieSyncManager.createInstance(context);
+        }
+        cookieManager.setAcceptCookie(true);
         java.net.CookieHandler.setDefault(new WebkitCookieManager(context, null, java.net.CookiePolicy.ACCEPT_ALL));
     }
 
