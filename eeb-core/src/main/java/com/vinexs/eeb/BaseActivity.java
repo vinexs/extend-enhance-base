@@ -184,7 +184,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Set a new Toolbar as action bar.
      * @param resId Toolbar resource id
      */
-    protected void setToolbar(int resId) {
+    public void setToolbar(int resId) {
         Toolbar toolbar = (Toolbar) findViewById(resId);
         if (toolbar != null) {
             setToolbar(toolbar);
@@ -195,7 +195,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Set a new Toolbar as action bar.
      * @param toolbar Toolbar found from view
      */
-    protected void setToolbar(Toolbar toolbar) {
+    public void setToolbar(Toolbar toolbar) {
         if (toolbar == null) {
             return;
         }
@@ -289,8 +289,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 if (hasLeftDrawer) {
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
-                    if (drawerToggle != null) {
-                        drawerToggle.setDrawerIndicatorEnabled(true);
+                    if (getDrawerToggle() != null) {
+                        getDrawerToggle().setDrawerIndicatorEnabled(true);
                     }
                 }
                 if (hasRightDrawer) {
@@ -307,7 +307,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Set or recover back stack BreadCrumbTitle from fragment entry.
+     * Set BreadCrumbTitle.
      * */
     public void setBackStackTitle(String title) {
         ActionBar actionbar = getSupportActionBar();
@@ -318,7 +318,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Set or recover back stack BreadCrumbTitle from fragment entry.
+     * Set BreadCrumbTitle with custom spannable string.
      * */
     public void setBackStackTitle(SpannableString title) {
         ActionBar actionbar = getSupportActionBar();
@@ -581,6 +581,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public Fragment getTopFragment() {
         FragmentManager fragMgr = getSupportFragmentManager();
+        if (fragMgr.getBackStackEntryCount() == 0) {
+            return null;
+        }
         FragmentManager.BackStackEntry backEntry = fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
         String backEntryName = backEntry.getName();
         return fragMgr.findFragmentByTag(backEntryName);

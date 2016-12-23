@@ -72,11 +72,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Google Library
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:preference-v7:25.0.1'
-    compile 'com.android.support:preference-v14:25.0.1'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:preference-v7:25.1.0'
+    compile 'com.android.support:preference-v14:25.1.0'
 
     // Iconics Library
     // https://github.com/mikepenz/Android-Iconics

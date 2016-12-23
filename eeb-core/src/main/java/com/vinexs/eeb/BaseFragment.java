@@ -149,15 +149,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int toolbarResId = getToolbarResId();
-        if (toolbarResId != 0 && getView() != null) {
-            Toolbar toolbar = (Toolbar) getView().findViewById(toolbarResId);
-            if (toolbar != null) {
-                getBaseActivity().setToolbar(toolbar);
-            } else {
-                Log.d(TAG, "Assigned Toolbar cannot be found.");
-            }
-        }
+        setCurrentToolBarAsActionBar();
     }
 
     /**
@@ -171,6 +163,21 @@ public abstract class BaseFragment extends Fragment {
      * @return Toolbar resource id.
      */
     public abstract int getToolbarResId();
+
+    /**
+     * Assign toolbar from this fragment as activity toolbar.
+     */
+    public void setCurrentToolBarAsActionBar() {
+        int toolbarResId = getToolbarResId();
+        if (toolbarResId != 0 && getView() != null) {
+            Toolbar toolbar = (Toolbar) getView().findViewById(toolbarResId);
+            if (toolbar != null) {
+                getBaseActivity().setToolbar(toolbar);
+            } else {
+                Log.d(TAG, "Assigned Toolbar cannot be found.");
+            }
+        }
+    }
 
     // region Fragments Control ====================================================================
 

@@ -143,8 +143,6 @@ public abstract class AbstractEnhancedWebView extends WebView {
 
         setHighRenderPriority();
 
-        setRequireLayerType();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             jellyBeanSetting();
         }
@@ -253,15 +251,6 @@ public abstract class AbstractEnhancedWebView extends WebView {
             webSettings.setRenderPriority(RenderPriority.HIGH);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void setRequireLayerType() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else {
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }
 
