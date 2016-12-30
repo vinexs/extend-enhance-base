@@ -196,6 +196,9 @@ public abstract class BaseFragment extends Fragment {
      */
     public Boolean isOnTop() {
         FragmentManager fragMgr = getActivity().getSupportFragmentManager();
+        if (fragMgr.getBackStackEntryCount() == 0) {
+            return true;
+        }
         FragmentManager.BackStackEntry backEntry = fragMgr.getBackStackEntryAt(fragMgr.getBackStackEntryCount() - 1);
         String backEntryName = backEntry.getName();
         return backEntryName != null && backEntryName.equals(getFragmentName());

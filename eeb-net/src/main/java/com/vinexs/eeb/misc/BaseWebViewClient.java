@@ -25,9 +25,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.net.http.SslError;
 import android.util.Log;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -127,11 +125,6 @@ public abstract class BaseWebViewClient extends WebViewClient {
                 onHttpError(view, 444);
                 break;
         }
-    }
-
-    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-        Log.e("BasicWebViewClient", "SSL error on " + view.getUrl() + ".");
-        handler.proceed();
     }
 
     @SuppressLint("NewApi")
