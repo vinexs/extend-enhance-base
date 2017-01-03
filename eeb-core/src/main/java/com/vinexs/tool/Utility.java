@@ -25,6 +25,7 @@ package com.vinexs.tool;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -234,38 +235,23 @@ public class Utility {
     }
 
     /**
-     * <p>Get user phone number.</p>
-     * Required Permission &lt;uses-permission android:name="android.permission.READ_PHONE_STATE"/&gt;
-     *
-     * @param context Application context.
-     * @return Phone number in string.
-     */
-    public static String getUserTelNo(Context context) {
-        try {
-            TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            return tMgr.getLine1Number();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * <p>Get user deivce id.</p>
      * Required Permission &lt;uses-permission android:name="android.permission.READ_PHONE_STATE"/&gt;
      *
      * @param context Application context
      * @return Deivce id in string.
      */
+    @SuppressLint("HardwareIds")
     public static String getUserDeviceId(Context context) {
         try {
-            if (!hasPermission(context, "android.permission.READ_PHONE_STATE")) {
-                throw new Exception();
+            if (!hasPermission(context, Manifest.permission.READ_PHONE_STATE)) {
+                throw new Exception("User did not grant permission, fallback to use build serial.");
             }
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            return telephonyManager.getDeviceId();
+            TelephonyManager teleMgr=(TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            return teleMgr.getDeviceId();
         } catch (Exception e) {
-            return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+            Log.i("Utility", e.getMessage());
+            return android.os.Build.SERIAL;
         }
     }
 
