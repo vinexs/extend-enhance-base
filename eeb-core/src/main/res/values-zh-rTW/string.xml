@@ -42,6 +42,10 @@
     <string name="update">更新</string>
     <string name="yes">是</string>
 
+    <!-- Event -->
+    <string name="clear_log">清空日誌</string>
+    <string name="copied_clipboard">已復製到剪貼板</string>
+
     <!-- Error -->
     <string name="error_occurred">發生錯誤了</string>
     <string name="action_device_not_support">您的設備不支持此操作。</string>

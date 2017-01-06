@@ -42,6 +42,10 @@
     <string name="update">Update</string>
     <string name="yes">Yes</string>
 
+    <!-- Event -->
+    <string name="clear_log">Clear Log</string>
+    <string name="copied_clipboard">Copied to Clipboard</string>
+
     <!-- Error -->
     <string name="error_occurred">Error Occurred</string>
     <string name="action_device_not_support">This action not supported for your device.</string>
