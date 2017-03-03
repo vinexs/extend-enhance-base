@@ -195,6 +195,15 @@ public abstract class BaseBrowserActivity extends BaseActivity {
                         }
                     }
                 }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if (url != null && !url.startsWith("http://") && !url.startsWith("https://")) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                        return true;
+                    }
+                    return false;
+                }
             });
         }
 
