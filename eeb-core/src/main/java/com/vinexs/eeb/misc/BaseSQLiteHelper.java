@@ -22,6 +22,7 @@
 
 package com.vinexs.eeb.misc;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -33,6 +34,7 @@ import android.util.Log;
 
 import com.vinexs.tool.ArrayManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -632,9 +634,16 @@ public abstract class BaseSQLiteHelper extends SQLiteOpenHelper {
         return sql;
     }
 
-    public static class Sql {
-        public String sql = "";
-        public String[] params = {};
+    @SuppressLint("SimpleDateFormat")
+    public String getTimeNow() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                .format(new java.util.Date());
+    }
+
+
+    private static class Sql {
+        String sql = "";
+        String[] params = {};
     }
 
 }
