@@ -640,7 +640,6 @@ public abstract class BaseSQLiteHelper extends SQLiteOpenHelper {
                 .format(new java.util.Date());
     }
 
-
     private static class Sql {
         String sql = "";
         String[] params = {};
