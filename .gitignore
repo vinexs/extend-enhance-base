@@ -8,16 +8,17 @@
 # Java class files
 *.class
 
-# built native files (uncomment if building own native code)
-# *.o
-# *.so
-
 # generated files
 bin/
 gen/
+build/
+captures/
+*/build/
 
 # Ignore gradle files
+.idea/
 *.iml
+*/*.iml
 .gradle/
 build/
 gradlew/
